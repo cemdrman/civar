@@ -1,0 +1,51 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import '../domain/models/place.dart';
+import '../domain/models/post.dart';
+import 'location_providers.dart';
+import 'membership_providers.dart';
+import 'repository_providers.dart';
+
+/// The four selectable feed radius options, matching the design's chips.
+const feedRadiusOptions = <double>[5, 20, 50, double.infinity];
+
+String radiusOptionLabel(double km) => km.isInfinite ? 'Sınırsız' : '${km.toInt()} km';
+
+class RadiusChipNotifier extends Notifier<double> {
+  @override
+  double build() => feedRadiusOptions.first;
+
+  /// Caller (radius_chip_bar) is responsible for checking against the current
+  /// tier's radius and routing to /paywall instead of calling this when locked.
+  void select(double km) => state = km;
+}
+
+final feedRadiusChipProvider =
+    NotifierProvider<RadiusChipNotifier, double>(RadiusChipNotifier.new);
+
+final placesStreamProvider = StreamProvider<List<Place>>(
+  (ref) => ref.watch(feedRepositoryProvider).watchPlaces(),
+);
+
+final feedStreamProvider = StreamProvider.autoDispose<List<Post>>((ref) {
+  final repo = ref.watch(feedRepositoryProvider);
+  final viewer = ref.watch(simulatedLocationProvider);
+  final radiusKm = ref.watch(feedRadiusChipProvider);
+  return repo.watchFeed(viewer: viewer, radiusKm: radiusKm);
+});
+
+/// Unfiltered (global radius) post stream — used by the map to compute
+/// per-place comment-count badges regardless of the viewer's current tier.
+final allPostsStreamProvider = StreamProvider.autoDispose<List<Post>>((ref) {
+  final repo = ref.watch(feedRepositoryProvider);
+  final viewer = ref.watch(simulatedLocationProvider);
+  return repo.watchFeed(viewer: viewer, radiusKm: double.infinity);
+});
+
+final placePostsStreamProvider =
+    StreamProvider.autoDispose.family<List<Post>, String>((ref, placeId) {
+  final repo = ref.watch(feedRepositoryProvider);
+  final viewer = ref.watch(simulatedLocationProvider);
+  final radiusKm = ref.watch(currentTierProvider).value?.radiusKm ?? feedRadiusOptions.first;
+  return repo.watchPostsForPlace(placeId, viewer: viewer, radiusKm: radiusKm);
+});
