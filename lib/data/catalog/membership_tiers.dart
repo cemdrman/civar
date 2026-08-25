@@ -1,7 +1,9 @@
-import '../../../domain/models/membership_tier.dart';
+import '../../domain/models/membership_tier.dart';
 
-/// Exact tiers from the design handoff (AppScreens.dc.html TIERS const).
-final seedTiers = <MembershipTier>[
+/// Static tier catalog (radius/price/features) — app config, not user data,
+/// so it isn't stored in Firestore. Used by both the mock and Firebase
+/// membership repositories.
+final membershipTierCatalog = <MembershipTier>[
   const MembershipTier(
     id: TierId.free,
     label: 'Keşifçi',

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,7 +47,7 @@ class ProfileScreen extends ConsumerWidget {
                     color: AppColors.accent,
                     shape: BoxShape.circle,
                     image: user?.photoPath != null
-                        ? DecorationImage(image: FileImage(File(user!.photoPath!)), fit: BoxFit.cover)
+                        ? DecorationImage(image: NetworkImage(user!.photoPath!), fit: BoxFit.cover)
                         : null,
                   ),
                   child: user?.photoPath == null

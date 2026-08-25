@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "281060357755",
+    "project_id": "civar-dev",
+    "storage_bucket": "civar-dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281060357755:android:e5b4584b3cb9c664f4d4de",
+        "android_client_info": {
+          "package_name": "com.civar.civar"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281060357755-lseb0kk7e5pnehr171afr6rll5rs935h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb1sPlOuPawaVHyljY_GbSI94ws-thfZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281060357755-lseb0kk7e5pnehr171afr6rll5rs935h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "281060357755-8uii37qhmtanok1muphsd3e6nm7n76gl.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.civar.civar"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

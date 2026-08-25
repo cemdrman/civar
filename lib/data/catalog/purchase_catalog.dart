@@ -1,8 +1,8 @@
-import '../../../domain/models/membership_tier.dart';
+import '../../domain/models/membership_tier.dart';
 
-/// Base (non-discounted) monthly prices, matching the tiers' seed priceLabel
-/// values in seed_tiers.dart. TierId.free is intentionally absent — it isn't
-/// a purchasable product.
+/// Base (non-discounted) monthly prices, matching membership_tiers.dart's
+/// priceLabel values. TierId.free is intentionally absent — it isn't a
+/// purchasable product.
 const basePricesTry = <TierId, double>{
   TierId.gezgin: 49,
   TierId.maceraci: 99,

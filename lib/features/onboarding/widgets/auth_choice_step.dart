@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../app_state/repository_providers.dart';
 import '../../../core/routing/route_paths.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radii.dart';
-import 'google_account_picker_sheet.dart';
+import '../../../core/widgets/app_toast.dart';
 
 class AuthChoiceStep extends ConsumerStatefulWidget {
   const AuthChoiceStep({super.key, required this.onChooseEmail});
@@ -21,14 +22,22 @@ class _AuthChoiceStepState extends ConsumerState<AuthChoiceStep> {
   bool _signingIn = false;
 
   Future<void> _continueWithGoogle() async {
-    final account = await showGoogleAccountPickerSheet(context);
-    if (account == null || !mounted) return;
-
     setState(() => _signingIn = true);
-    await ref
-        .read(authRepositoryProvider)
-        .signInWithGoogle(fullName: account.fullName, email: account.email);
-    if (mounted) context.go(RoutePaths.map);
+    try {
+      await ref.read(authRepositoryProvider).signInWithGoogle();
+      if (mounted) context.go(RoutePaths.map);
+    } on GoogleSignInException catch (e) {
+      if (!mounted) return;
+      setState(() => _signingIn = false);
+      // User closing the picker is normal, not an error worth surfacing.
+      if (e.code != GoogleSignInExceptionCode.canceled) {
+        showAppToast(context, 'Google ile giriş yapılamadı, tekrar dene.');
+      }
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _signingIn = false);
+      showAppToast(context, 'Google ile giriş yapılamadı, tekrar dene.');
+    }
   }
 
   @override

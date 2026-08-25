@@ -1,0 +1,56 @@
+rules_version = '2';
+
+// Trust boundary note: this app has no Cloud Functions yet, so purchases are
+// still client-simulated (see PurchaseRepository doc comments) — a signed-in
+// client can technically write itself a purchase/tier it didn't pay for.
+// Real receipt verification (App Store/Play Store server-to-server) belongs
+// in a Cloud Function before this app takes real payments; these rules only
+// enforce "you can only write your own data," not "your payment was real."
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read: if isSignedIn();
+      allow create: if isOwner(uid);
+      allow update: if isOwner(uid);
+      allow delete: if false;
+    }
+
+    // Static POI catalog — seeded once by the app (see FirebaseFeedRepository),
+    // read-only from the client afterward.
+    match /places/{placeId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn();
+    }
+
+    match /posts/{postId} {
+      allow read: if isSignedIn();
+      allow create: if isSignedIn() && request.resource.data.authorId == request.auth.uid;
+      allow update, delete: if isSignedIn() && resource.data.authorId == request.auth.uid;
+    }
+
+    // Purchase receipts — immutable once written, only the owner can read
+    // their own history.
+    match /purchases/{purchaseId} {
+      allow read: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      allow update, delete: if false;
+    }
+
+    // Moderation reports — write-only from the client (a real moderation
+    // queue/admin tool reads these, not end users).
+    match /reports/{reportId} {
+      allow read: if false;
+      allow create: if isSignedIn() && request.resource.data.reportedBy == request.auth.uid;
+      allow update, delete: if false;
+    }
+  }
+}

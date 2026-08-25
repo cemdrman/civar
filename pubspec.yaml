@@ -39,6 +39,12 @@ dependencies:
   google_fonts: ^8.2.0
   geolocator: ^14.0.3
   image_picker: ^1.2.3
+  firebase_core: ^4.14.0
+  firebase_auth: ^6.6.0
+  cloud_firestore: ^6.9.0
+  firebase_storage: ^13.5.0
+  google_sign_in: ^7.2.0
+  geoflutterfire_plus: ^0.0.34
 
 dev_dependencies:
   flutter_test:
@@ -50,9 +56,28 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  firebase_auth_mocks: ^0.15.2
+  fake_cloud_firestore: ^4.2.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+# App icon — generated from the same mark used on the onboarding welcome
+# screen (accent-colored square + white circle, see welcome_step.dart).
+# Regenerate with: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/icon/icon.png"
+  adaptive_icon_background: "#E0603A"
+  adaptive_icon_foreground: "assets/icon/icon_foreground.png"
+  remove_alpha_ios: true
+  web:
+    generate: true
+    image_path: "assets/icon/icon.png"
+    background_color: "#E0603A"
+    theme_color: "#E0603A"
 
 # The following section is specific to Flutter packages.
 flutter:

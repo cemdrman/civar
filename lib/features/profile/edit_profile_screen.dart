@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,7 +21,8 @@ class EditProfileScreen extends ConsumerStatefulWidget {
 
 class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   late final TextEditingController _bioController;
-  String? _photoPath;
+  String? _photoUrl;
+  bool _uploadingPhoto = false;
   bool _saving = false;
   bool _initialized = false;
 
@@ -31,18 +33,35 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
   }
 
   bool get _bioHasLink => containsLink(_bioController.text);
-  bool get _canSave => !_bioHasLink && !_saving;
+  bool get _canSave => !_bioHasLink && !_saving && !_uploadingPhoto;
 
-  Future<void> _pickPhoto() async {
+  Future<void> _pickPhoto(String uid) async {
     final picked = await ImagePicker().pickImage(source: ImageSource.gallery, imageQuality: 85);
-    if (picked != null) setState(() => _photoPath = picked.path);
+    if (picked == null) return;
+
+    setState(() => _uploadingPhoto = true);
+    try {
+      final storageRef =
+          FirebaseStorage.instance.ref('profile_photos/$uid/${DateTime.now().millisecondsSinceEpoch}.jpg');
+      await storageRef.putFile(File(picked.path));
+      final url = await storageRef.getDownloadURL();
+      if (!mounted) return;
+      setState(() {
+        _photoUrl = url;
+        _uploadingPhoto = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _uploadingPhoto = false);
+      showAppToast(context, 'Fotoğraf yüklenemedi, tekrar dene.');
+    }
   }
 
   Future<void> _save() async {
     if (!_canSave) return;
     setState(() => _saving = true);
     await ref.read(authRepositoryProvider).updateProfile(
-          photoPath: _photoPath,
+          photoPath: _photoUrl,
           bio: _bioController.text.trim(),
         );
     if (!mounted) return;
@@ -56,7 +75,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     if (!_initialized && user != null) {
       _bioController = TextEditingController(text: user.bio);
-      _photoPath = user.photoPath;
+      _photoUrl = user.photoPath;
       _initialized = true;
     }
     if (!_initialized) {
@@ -84,14 +103,14 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         children: [
           Center(
             child: GestureDetector(
-              onTap: _pickPhoto,
+              onTap: _uploadingPhoto ? null : () => _pickPhoto(user!.id),
               child: Stack(
                 children: [
                   CircleAvatar(
                     radius: 44,
                     backgroundColor: AppColors.accent,
-                    backgroundImage: _photoPath != null ? FileImage(File(_photoPath!)) : null,
-                    child: _photoPath == null
+                    backgroundImage: _photoUrl != null ? NetworkImage(_photoUrl!) : null,
+                    child: _photoUrl == null
                         ? Text(
                             user!.initials,
                             style: const TextStyle(
@@ -102,6 +121,18 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
                           )
                         : null,
                   ),
+                  if (_uploadingPhoto)
+                    const Positioned.fill(
+                      child: CircleAvatar(
+                        radius: 44,
+                        backgroundColor: Colors.black45,
+                        child: SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        ),
+                      ),
+                    ),
                   Positioned(
                     right: 0,
                     bottom: 0,
@@ -123,7 +154,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           const SizedBox(height: 8),
           Center(
             child: TextButton(
-              onPressed: _pickPhoto,
+              onPressed: _uploadingPhoto ? null : () => _pickPhoto(user!.id),
               child: const Text('Profil fotoğrafını değiştir'),
             ),
           ),

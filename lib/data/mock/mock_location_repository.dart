@@ -4,7 +4,8 @@ import 'package:geolocator/geolocator.dart' as geo;
 
 import '../../core/utils/geo_utils.dart';
 import '../../domain/repositories/location_repository.dart';
-import 'seed/seed_places.dart';
+import '../catalog/place_catalog.dart';
+import 'seed/seed_location_presets.dart';
 
 class MockLocationRepository implements LocationRepository {
   LatLng _current = defaultSimulatedLocation;
