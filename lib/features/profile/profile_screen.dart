@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,35 +37,67 @@ class ProfileScreen extends ConsumerWidget {
         padding: const EdgeInsets.fromLTRB(18, 20, 18, 24),
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 64,
-                height: 64,
-                alignment: Alignment.center,
-                decoration: const BoxDecoration(color: AppColors.accent, shape: BoxShape.circle),
-                child: Text(
-                  user?.initials ?? '?',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
+              GestureDetector(
+                onTap: () => context.push(RoutePaths.editProfile),
+                child: Container(
+                  width: 64,
+                  height: 64,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: AppColors.accent,
+                    shape: BoxShape.circle,
+                    image: user?.photoPath != null
+                        ? DecorationImage(image: FileImage(File(user!.photoPath!)), fit: BoxFit.cover)
+                        : null,
+                  ),
+                  child: user?.photoPath == null
+                      ? Text(
+                          user?.initials ?? '?',
+                          style: const TextStyle(
+                              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
+                        )
+                      : null,
                 ),
               ),
               const SizedBox(width: 14),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user?.fullName ?? '',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 19),
-                  ),
-                  const SizedBox(height: 2),
-                  Text(
-                    '${tier?.label ?? ''} planı',
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.accentDark,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user?.fullName ?? '',
+                      style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 19),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    Text(
+                      '${tier?.label ?? ''} planı',
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.accentDark,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    GestureDetector(
+                      onTap: () => context.push(RoutePaths.editProfile),
+                      child: Text(
+                        (user?.bio.isNotEmpty ?? false) ? user!.bio : 'Biyografini ekle',
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 12.5,
+                          height: 1.35,
+                          color: (user?.bio.isNotEmpty ?? false)
+                              ? AppColors.textSecondary
+                              : AppColors.textFaint,
+                          fontStyle: (user?.bio.isNotEmpty ?? false) ? FontStyle.normal : FontStyle.italic,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -167,6 +201,10 @@ class ProfileScreen extends ConsumerWidget {
             clipBehavior: Clip.antiAlias,
             child: Column(
               children: [
+                _SettingsRow(
+                  label: 'Profili düzenle',
+                  onTap: () => context.push(RoutePaths.editProfile),
+                ),
                 const _SettingsRow(label: 'Bildirimler'),
                 const _SettingsRow(label: 'Gizlilik'),
                 const _SettingsRow(label: 'Engellenenler'),

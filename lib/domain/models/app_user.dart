@@ -4,11 +4,18 @@ class AppUser {
   final String email;
   final String initials;
 
+  /// Local file path in this mock phase — becomes a Storage download URL
+  /// once a real backend is wired up.
+  final String? photoPath;
+  final String bio;
+
   const AppUser({
     required this.id,
     required this.fullName,
     required this.email,
     required this.initials,
+    this.photoPath,
+    this.bio = '',
   });
 
   factory AppUser.fromFullName({
@@ -24,4 +31,13 @@ class AppUser {
             : (parts.first.substring(0, 1) + parts.last.substring(0, 1)).toUpperCase();
     return AppUser(id: id, fullName: fullName, email: email, initials: initials);
   }
+
+  AppUser copyWith({String? photoPath, String? bio}) => AppUser(
+        id: id,
+        fullName: fullName,
+        email: email,
+        initials: initials,
+        photoPath: photoPath ?? this.photoPath,
+        bio: bio ?? this.bio,
+      );
 }

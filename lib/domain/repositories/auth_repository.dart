@@ -10,5 +10,9 @@ abstract class AuthRepository {
   /// (see GoogleAccountPickerSheet) and passes its choice straight through.
   Future<AppUser> signInWithGoogle({required String fullName, required String email});
 
+  /// Updates the signed-in user's photo and/or bio. Pass null for a field to
+  /// leave it unchanged.
+  Future<AppUser> updateProfile({String? photoPath, String? bio});
+
   Future<void> signOut();
 }

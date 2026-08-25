@@ -13,6 +13,7 @@ import '../../features/map/map_screen.dart';
 import '../../features/onboarding/onboarding_flow_screen.dart';
 import '../../features/paywall/paywall_screen.dart';
 import '../../features/place_detail/place_detail_screen.dart';
+import '../../features/profile/edit_profile_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/shell/app_shell.dart';
 import 'route_paths.dart';
@@ -94,6 +95,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RoutePaths.paywall,
         builder: (context, state) => const PaywallScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.editProfile,
+        builder: (context, state) => const EditProfileScreen(),
       ),
     ],
   );

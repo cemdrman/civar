@@ -39,6 +39,18 @@ class MockAuthRepository implements AuthRepository {
   }
 
   @override
+  Future<AppUser> updateProfile({String? photoPath, String? bio}) async {
+    final current = _user;
+    if (current == null) {
+      throw StateError('updateProfile called with no signed-in user.');
+    }
+    final updated = current.copyWith(photoPath: photoPath, bio: bio);
+    _user = updated;
+    _controller.add(updated);
+    return updated;
+  }
+
+  @override
   Future<void> signOut() async {
     _user = null;
     _controller.add(null);
