@@ -12,6 +12,7 @@ import '../../core/utils/geo_utils.dart';
 import '../../core/widgets/placeholder_box.dart';
 import '../../domain/models/place.dart';
 import '../../domain/models/post.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/place_pin.dart';
 import 'widgets/place_preview_sheet.dart';
 
@@ -27,6 +28,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final placesAsync = ref.watch(placesStreamProvider);
     final postsAsync = ref.watch(allPostsStreamProvider);
     final tierAsync = ref.watch(currentTierProvider);
@@ -47,7 +49,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Harita', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20)),
+                Text(l10n.mapLabel, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20)),
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                   decoration: BoxDecoration(
@@ -64,7 +66,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        '$tierLabel çap',
+                        l10n.radiusSuffix(tierLabel),
                         style: const TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -85,7 +87,7 @@ class _MapScreenState extends ConsumerState<MapScreen> {
                   return Stack(
                     children: [
                       Positioned.fill(
-                        child: PlaceholderBox(label: 'HARİTA GÖRÜNÜMÜ · yoğunluk katmanı'),
+                        child: PlaceholderBox(label: l10n.mapPlaceholderLabel),
                       ),
                       for (final place in places)
                         _HeatCircle(place: place, canvasSize: constraints.biggest),
@@ -118,8 +120,9 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
   Widget _buildPreview(BuildContext context, Place place, List<Post> posts, LatLng viewer) {
     final placePosts = posts.where((p) => p.placeId == place.id).toList();
-    final teaser =
-        placePosts.isEmpty ? 'Henüz yorum yok, ilk sen yaz.' : placePosts.first.text;
+    final teaser = placePosts.isEmpty
+        ? AppLocalizations.of(context)!.noCommentsYetWriteFirst
+        : placePosts.first.text;
 
     return PlacePreviewSheet(
       place: place,

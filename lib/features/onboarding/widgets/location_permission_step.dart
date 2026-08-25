@@ -5,6 +5,7 @@ import '../../../app_state/repository_providers.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/placeholder_box.dart';
 import '../../../core/widgets/pill_button.dart';
+import '../../../l10n/app_localizations.dart';
 
 class LocationPermissionStep extends ConsumerWidget {
   const LocationPermissionStep({super.key, required this.onNext});
@@ -13,13 +14,14 @@ class LocationPermissionStep extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
         children: [
-          const Expanded(
+          Expanded(
             child: PlaceholderBox(
-              label: 'KONUM İZNİ İLLÜSTRASYONU',
+              label: l10n.locationPermissionIllustrationLabel,
               tint: PlaceholderTint.accent2,
             ),
           ),
@@ -28,25 +30,13 @@ class LocationPermissionStep extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Konumuna ihtiyacımız var',
+                l10n.locationNeededTitle,
                 style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22),
               ),
               const SizedBox(height: 8),
-              const Text.rich(
-                TextSpan(
-                  style: TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
-                  children: [
-                    TextSpan(text: 'Civar, yalnızca '),
-                    TextSpan(
-                      text: '5 km',
-                      style: TextStyle(color: AppColors.text, fontWeight: FontWeight.w700),
-                    ),
-                    TextSpan(
-                      text:
-                          ' çapındaki yorumları gösterir. Bu çapı yalnızca aylık üyelikle artırabilirsin.',
-                    ),
-                  ],
-                ),
+              Text(
+                l10n.locationPermissionExplainer('5 km'),
+                style: const TextStyle(fontSize: 15, color: AppColors.textSecondary, height: 1.5),
               ),
             ],
           ),
@@ -54,7 +44,7 @@ class LocationPermissionStep extends ConsumerWidget {
           Column(
             children: [
               PillButton(
-                label: 'Konumuma izin ver',
+                label: l10n.allowLocationAccess,
                 onPressed: () async {
                   await ref.read(locationRepositoryProvider).requestPermission();
                   onNext();
@@ -64,7 +54,7 @@ class LocationPermissionStep extends ConsumerWidget {
               TextButton(
                 onPressed: onNext,
                 style: TextButton.styleFrom(foregroundColor: AppColors.textSecondary),
-                child: const Text('Şimdi değil'),
+                child: Text(l10n.notNow),
               ),
             ],
           ),

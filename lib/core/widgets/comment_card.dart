@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/models/post.dart';
+import '../../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_radii.dart';
 import 'avatar_initials.dart';
@@ -29,6 +30,7 @@ class CommentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(AppRadii.cardPadding),
       decoration: BoxDecoration(
@@ -84,7 +86,7 @@ class CommentCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                '$placeName · ${post.distanceKm.toStringAsFixed(1)} km',
+                                l10n.placeTagDistance(placeName!, post.distanceKm.toStringAsFixed(1)),
                                 style: const TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w700,
@@ -114,7 +116,7 @@ class CommentCard extends StatelessWidget {
           if (post.hasMedia) ...[
             const SizedBox(height: 10),
             PlaceholderBox(
-              label: 'FOTOĞRAF / VİDEO',
+              label: l10n.photoVideoLabel,
               tint: PlaceholderTint.accent,
               height: 130,
               borderRadius: 12,
@@ -132,13 +134,13 @@ class CommentCard extends StatelessWidget {
                 ),
                 const SizedBox(width: 16),
                 if (!post.canReplyNow)
-                  const Row(
+                  Row(
                     children: [
-                      Text('🔒', style: TextStyle(fontSize: 11)),
-                      SizedBox(width: 5),
+                      const Text('🔒', style: TextStyle(fontSize: 11)),
+                      const SizedBox(width: 5),
                       Text(
-                        'Konumundan uzaklaştın',
-                        style: TextStyle(fontSize: 12.5, color: AppColors.textFaint),
+                        l10n.movedAwayFromLocation,
+                        style: const TextStyle(fontSize: 12.5, color: AppColors.textFaint),
                       ),
                     ],
                   )
@@ -146,7 +148,7 @@ class CommentCard extends StatelessWidget {
                   GestureDetector(
                     onTap: onTapPlace,
                     child: Text(
-                      '${post.replyCount} yanıt · Cevapla',
+                      l10n.replyCountLabel(post.replyCount),
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,

@@ -9,7 +9,8 @@ import 'repository_providers.dart';
 /// The four selectable feed radius options, matching the design's chips.
 const feedRadiusOptions = <double>[5, 20, 50, double.infinity];
 
-String radiusOptionLabel(double km) => km.isInfinite ? 'Sınırsız' : '${km.toInt()} km';
+String radiusOptionLabel(double km, String unlimitedLabel) =>
+    km.isInfinite ? unlimitedLabel : '${km.toInt()} km';
 
 class RadiusChipNotifier extends Notifier<double> {
   @override

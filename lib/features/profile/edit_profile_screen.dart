@@ -11,6 +11,7 @@ import '../../core/constants/profile_limits.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/utils/link_validation.dart';
 import '../../core/widgets/app_toast.dart';
+import '../../l10n/app_localizations.dart';
 
 class EditProfileScreen extends ConsumerStatefulWidget {
   const EditProfileScreen({super.key});
@@ -53,7 +54,7 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
     } catch (_) {
       if (!mounted) return;
       setState(() => _uploadingPhoto = false);
-      showAppToast(context, 'Fotoğraf yüklenemedi, tekrar dene.');
+      showAppToast(context, AppLocalizations.of(context)!.photoUploadFailed);
     }
   }
 
@@ -66,11 +67,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
         );
     if (!mounted) return;
     Navigator.of(context).pop();
-    showAppToast(context, 'Profilin güncellendi.');
+    showAppToast(context, AppLocalizations.of(context)!.profileUpdated);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider).value;
 
     if (!_initialized && user != null) {
@@ -84,12 +86,12 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profili düzenle'),
+        title: Text(l10n.editProfile),
         actions: [
           TextButton(
             onPressed: _canSave ? _save : null,
             child: Text(
-              _saving ? '...' : 'Kaydet',
+              _saving ? '...' : l10n.save,
               style: TextStyle(
                 color: _canSave ? AppColors.accent : AppColors.textFaint,
                 fontWeight: FontWeight.w700,
@@ -155,11 +157,11 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
           Center(
             child: TextButton(
               onPressed: _uploadingPhoto ? null : () => _pickPhoto(user!.id),
-              child: const Text('Profil fotoğrafını değiştir'),
+              child: Text(l10n.changeProfilePhoto),
             ),
           ),
           const SizedBox(height: 18),
-          const Text('Biyografi', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+          Text(l10n.bioLabel, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
           const SizedBox(height: 8),
           TextField(
             controller: _bioController,
@@ -167,8 +169,8 @@ class _EditProfileScreenState extends ConsumerState<EditProfileScreen> {
             maxLines: 3,
             onChanged: (_) => setState(() {}),
             decoration: InputDecoration(
-              hintText: 'Kendinden kısaca bahset...',
-              errorText: _bioHasLink ? 'Biyografide bağlantı paylaşamazsın.' : null,
+              hintText: l10n.bioHint,
+              errorText: _bioHasLink ? l10n.bioLinkNotAllowed : null,
             ),
           ),
         ],

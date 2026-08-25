@@ -6,6 +6,7 @@ import '../../app_state/repository_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../core/widgets/avatar_initials.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/message_bubble.dart';
 
 class DmChatScreen extends ConsumerStatefulWidget {
@@ -45,6 +46,7 @@ class _DmChatScreenState extends ConsumerState<DmChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final threads = ref.watch(dmThreadsStreamProvider).value ?? const [];
     final thread = threads.where((t) => t.id == widget.threadId).firstOrNull;
     final messagesAsync = ref.watch(dmMessagesProvider(widget.threadId));
@@ -91,7 +93,7 @@ class _DmChatScreenState extends ConsumerState<DmChatScreen> {
                   separatorBuilder: (_, _) => const SizedBox(height: 10),
                   itemBuilder: (context, index) => MessageBubble(message: messages[index]),
                 ),
-                error: (err, st) => Center(child: Text('Bir şeyler ters gitti: $err')),
+                error: (err, st) => Center(child: Text(l10n.streamError(err))),
                 loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ),
@@ -107,7 +109,7 @@ class _DmChatScreenState extends ConsumerState<DmChatScreen> {
                     child: TextField(
                       controller: _inputController,
                       decoration: InputDecoration(
-                        hintText: 'Mesaj yaz...',
+                        hintText: l10n.writeMessageHint,
                         filled: true,
                         fillColor: AppColors.surface2,
                         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),

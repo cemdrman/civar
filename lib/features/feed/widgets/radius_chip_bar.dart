@@ -6,6 +6,7 @@ import '../../../app_state/feed_providers.dart';
 import '../../../app_state/membership_providers.dart';
 import '../../../core/routing/route_paths.dart';
 import '../../../core/widgets/radius_chip.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Horizontal radius filter chips. Tapping a chip beyond the current tier's
 /// radius opens the paywall instead of updating the filter.
@@ -28,7 +29,7 @@ class RadiusChipBar extends ConsumerWidget {
           final km = feedRadiusOptions[index];
           final locked = km > tierRadiusKm;
           return RadiusChip(
-            label: radiusOptionLabel(km),
+            label: radiusOptionLabel(km, AppLocalizations.of(context)!.unlimitedRadius),
             selected: selected == km,
             locked: locked,
             onTap: () {

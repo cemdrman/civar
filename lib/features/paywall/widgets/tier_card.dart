@@ -5,6 +5,7 @@ import '../../../core/theme/app_radii.dart';
 import '../../../core/widgets/pill_button.dart';
 import '../../../domain/models/membership_tier.dart';
 import '../../../domain/models/purchase_product.dart';
+import '../../../l10n/app_localizations.dart';
 
 class TierCard extends StatelessWidget {
   const TierCard({
@@ -27,6 +28,7 @@ class TierCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final dark = isCurrent;
     final fg = dark ? Colors.white : AppColors.text;
     final fgMuted = dark ? Colors.white70 : AppColors.textSecondary;
@@ -53,7 +55,7 @@ class TierCard extends StatelessWidget {
                       style: TextStyle(fontWeight: FontWeight.w700, fontSize: 17, color: fg),
                     ),
                     const SizedBox(height: 2),
-                    Text('${tier.radiusLabel} çap', style: TextStyle(fontSize: 13, color: fgMuted)),
+                    Text(l10n.radiusSuffix(tier.radiusLabel), style: TextStyle(fontSize: 13, color: fgMuted)),
                   ],
                 ),
               ),
@@ -74,7 +76,7 @@ class TierCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppRadii.pill),
               ),
               child: Text(
-                'İlk aya özel %50 indirim',
+                l10n.firstMonthDiscountTag,
                 style: TextStyle(
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
@@ -93,14 +95,14 @@ class TierCard extends StatelessWidget {
                 color: Colors.white.withValues(alpha: 0.15),
                 borderRadius: BorderRadius.circular(AppRadii.pill),
               ),
-              child: const Text(
-                'Mevcut planın',
-                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
+              child: Text(
+                l10n.currentPlanBadge,
+                style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
               ),
             )
           else
             PillButton(
-              label: isPurchasing ? 'Satın alınıyor...' : 'Bu plana geç',
+              label: isPurchasing ? l10n.purchasing : l10n.switchToThisPlan,
               onPressed: isPurchasing ? null : onSelect,
             ),
         ],

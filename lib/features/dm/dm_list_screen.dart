@@ -8,6 +8,7 @@ import '../../core/routing/route_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../core/widgets/locked_banner.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/thread_tile.dart';
 
 class DmListScreen extends ConsumerWidget {
@@ -18,7 +19,7 @@ class DmListScreen extends ConsumerWidget {
     showDialog<void>(
       context: context,
       builder: (dialogContext) => SimpleDialog(
-        title: const Text('Kiminle konuşmak istersin?'),
+        title: Text(AppLocalizations.of(dialogContext)!.whoToMessageTitle),
         children: [
           for (final t in threads)
             SimpleDialogOption(
@@ -35,6 +36,7 @@ class DmListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final threadsAsync = ref.watch(dmThreadsStreamProvider);
     final canSendNewDm = ref.watch(currentTierProvider).value?.canSendNewDm ?? false;
     final locked = !canSendNewDm;
@@ -48,7 +50,7 @@ class DmListScreen extends ConsumerWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Mesajlar', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20)),
+                Text(l10n.messagesLabel, style: Theme.of(context).textTheme.titleLarge?.copyWith(fontSize: 20)),
                 GestureDetector(
                   onTap: () {
                     if (locked) {
@@ -70,9 +72,9 @@ class DmListScreen extends ConsumerWidget {
                           const Text('🔒', style: TextStyle(fontSize: 11)),
                           const SizedBox(width: 5),
                         ],
-                        const Text(
-                          'Yeni mesaj',
-                          style: TextStyle(
+                        Text(
+                          l10n.newMessage,
+                          style: const TextStyle(
                             fontSize: 12.5,
                             fontWeight: FontWeight.w700,
                             color: AppColors.textSecondary,
@@ -86,10 +88,10 @@ class DmListScreen extends ConsumerWidget {
             ),
           ),
           if (locked)
-            const Padding(
-              padding: EdgeInsets.fromLTRB(18, 4, 18, 4),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 4, 18, 4),
               child: LockedBanner(
-                message: 'Ücretsiz üyeler yeni sohbet başlatamaz, ama gelen mesajlara yanıt verebilir.',
+                message: l10n.freeTierDmLockedMessage,
               ),
             ),
           Expanded(
@@ -105,7 +107,7 @@ class DmListScreen extends ConsumerWidget {
                   );
                 },
               ),
-              error: (err, st) => Center(child: Text('Bir şeyler ters gitti: $err')),
+              error: (err, st) => Center(child: Text(l10n.streamError(err))),
               loading: () => const Center(child: CircularProgressIndicator()),
             ),
           ),

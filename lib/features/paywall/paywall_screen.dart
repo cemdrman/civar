@@ -9,6 +9,7 @@ import '../../core/theme/app_radii.dart';
 import '../../core/widgets/app_toast.dart';
 import '../../domain/models/membership_tier.dart';
 import '../../domain/repositories/purchase_repository.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/tier_card.dart';
 
 class PaywallScreen extends ConsumerStatefulWidget {
@@ -23,9 +24,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   bool _restoring = false;
 
   Future<void> _selectTier(MembershipTier tier) async {
+    final l10n = AppLocalizations.of(context)!;
     if (tier.id == TierId.free) {
       await ref.read(membershipRepositoryProvider).switchTier(tier.id);
-      if (mounted) showAppToast(context, 'Planın ${tier.label}\'a düşürüldü.');
+      if (mounted) showAppToast(context, l10n.planDowngraded(tier.label));
       return;
     }
 
@@ -39,8 +41,8 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     showAppToast(
       context,
       result.status == PurchaseStatus.success
-          ? 'Planın ${tier.label}\'a yükseltildi.'
-          : result.errorMessage ?? 'Satın alma tamamlanamadı.',
+          ? l10n.planUpgraded(tier.label)
+          : result.errorMessage ?? l10n.purchaseNotCompleted,
     );
   }
 
@@ -49,24 +51,25 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
     await ref.read(purchaseRepositoryProvider).restorePurchases();
     if (!mounted) return;
     setState(() => _restoring = false);
-    showAppToast(context, 'Geri yüklenecek bir satın alma bulunamadı.');
+    showAppToast(context, AppLocalizations.of(context)!.noPurchasesToRestore);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final tiers = ref.watch(tiersProvider);
     final currentTier = ref.watch(currentTierProvider).value;
     final products = ref.watch(purchaseProductsStreamProvider).value ?? const [];
     final discountActive = products.any((p) => p.hasDiscount);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Çapını genişlet')),
+      appBar: AppBar(title: Text(l10n.expandYourRadius)),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          const Text(
-            'Daha geniş bir çapta yorum görmek ve cevap vermek, ayrıca kişilere mesaj atabilmek için yükselt.',
-            style: TextStyle(fontSize: 13.5, color: Colors.black54, height: 1.5),
+          Text(
+            l10n.paywallExplainer,
+            style: const TextStyle(fontSize: 13.5, color: Colors.black54, height: 1.5),
           ),
           if (discountActive) ...[
             const SizedBox(height: 12),
@@ -77,9 +80,9 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
                 color: AppColors.accentSoft,
                 borderRadius: BorderRadius.circular(AppRadii.card - 4),
               ),
-              child: const Text(
-                '🎉 İlk üyeliğine özel: ilk ay tüm planlarda %50 indirim!',
-                style: TextStyle(
+              child: Text(
+                l10n.firstMonthDiscountBanner,
+                style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
                   color: AppColors.accentDark,
@@ -103,7 +106,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             child: TextButton(
               onPressed: _restoring ? null : _restorePurchases,
               child: Text(
-                _restoring ? 'Kontrol ediliyor...' : 'Satın alımları geri yükle',
+                _restoring ? l10n.checkingEllipsis : l10n.restorePurchases,
                 style: const TextStyle(color: AppColors.textSecondary, fontSize: 13),
               ),
             ),

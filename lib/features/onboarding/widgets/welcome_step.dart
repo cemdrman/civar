@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/pill_button.dart';
+import '../../../l10n/app_localizations.dart';
 
 class WelcomeStep extends StatelessWidget {
   const WelcomeStep({super.key, required this.onNext});
@@ -41,13 +42,17 @@ class WelcomeStep extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 8),
-          const Text(
-            'Çevrende gerçekten neler oluyor? Sadece bulunduğun yerdeki yorumları gör, konuş.',
+          Text(
+            AppLocalizations.of(context)!.onboardingTagline,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 16, color: AppColors.textSecondary, height: 1.4),
+            style: const TextStyle(fontSize: 16, color: AppColors.textSecondary, height: 1.4),
           ),
           const SizedBox(height: 22),
-          PillButton(label: 'Başla', onPressed: onNext, expand: false),
+          PillButton(
+            label: AppLocalizations.of(context)!.onboardingStart,
+            onPressed: onNext,
+            expand: false,
+          ),
         ],
       ),
     );

@@ -6,6 +6,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../core/widgets/app_toast.dart';
 import '../../domain/models/report_reason.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Bottom sheet with the 5 report reasons; submitting reports the post and
 /// shows a confirmation toast.
@@ -18,7 +19,7 @@ Future<void> showReportSheet(BuildContext context, WidgetRef ref, String postId)
         Navigator.of(sheetContext).pop();
         await ref.read(feedRepositoryProvider).reportPost(postId: postId, reason: reason);
         if (context.mounted) {
-          showAppToast(context, 'Bildirdiğin için teşekkürler, ekibimiz inceleyecek.');
+          showAppToast(context, AppLocalizations.of(context)!.reportThanks);
         }
       },
     ),
@@ -32,6 +33,7 @@ class _ReportSheetContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
       decoration: const BoxDecoration(
@@ -55,9 +57,9 @@ class _ReportSheetContent extends StatelessWidget {
                 ),
               ),
             ),
-            const Text(
-              'Bu yorumu bildir',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            Text(
+              l10n.reportThisComment,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
             ),
             const SizedBox(height: 8),
             for (final reason in ReportReason.values)
@@ -73,7 +75,7 @@ class _ReportSheetContent extends StatelessWidget {
               ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('Vazgeç', style: TextStyle(color: AppColors.textSecondary)),
+              child: Text(l10n.cancel, style: const TextStyle(color: AppColors.textSecondary)),
             ),
           ],
         ),

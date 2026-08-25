@@ -4,6 +4,7 @@ import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radii.dart';
 import '../../../core/widgets/pill_button.dart';
 import '../../../domain/models/place.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Bottom preview card shown when a map pin is tapped.
 class PlacePreviewSheet extends StatelessWidget {
@@ -72,7 +73,10 @@ class PlacePreviewSheet extends StatelessWidget {
           const SizedBox(height: 10),
           Text(teaser, style: const TextStyle(fontSize: 14, height: 1.4)),
           const SizedBox(height: 12),
-          PillButton(label: '$commentCount yorumu gör', onPressed: onViewDetail),
+          PillButton(
+            label: AppLocalizations.of(context)!.viewCommentsCount(commentCount),
+            onPressed: onViewDetail,
+          ),
         ],
       ),
     );

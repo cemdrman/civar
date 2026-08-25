@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../core/routing/route_paths.dart';
 import '../../core/theme/app_colors.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Custom bottom bar (not the stock BottomNavigationBar) — 4 nav items plus a
 /// center raised circular FAB for Compose, matching the design's tab bar.
@@ -13,6 +14,7 @@ class AppShell extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: navigationShell,
       bottomNavigationBar: Container(
@@ -28,26 +30,26 @@ class AppShell extends StatelessWidget {
             children: [
               _NavItem(
                 icon: Icons.map_outlined,
-                label: 'Harita',
+                label: l10n.mapLabel,
                 selected: navigationShell.currentIndex == 0,
                 onTap: () => navigationShell.goBranch(0),
               ),
               _NavItem(
                 icon: Icons.explore_outlined,
-                label: 'Keşfet',
+                label: l10n.exploreLabel,
                 selected: navigationShell.currentIndex == 1,
                 onTap: () => navigationShell.goBranch(1),
               ),
               _ComposeFab(onTap: () => context.push(RoutePaths.compose)),
               _NavItem(
                 icon: Icons.chat_bubble_outline,
-                label: 'Mesajlar',
+                label: l10n.messagesLabel,
                 selected: navigationShell.currentIndex == 2,
                 onTap: () => navigationShell.goBranch(2),
               ),
               _NavItem(
                 icon: Icons.person_outline,
-                label: 'Profil',
+                label: l10n.profileLabel,
                 selected: navigationShell.currentIndex == 3,
                 onTap: () => navigationShell.goBranch(3),
               ),

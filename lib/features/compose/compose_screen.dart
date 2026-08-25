@@ -11,6 +11,7 @@ import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../core/utils/media_validation.dart';
 import '../../core/widgets/app_toast.dart';
+import '../../l10n/app_localizations.dart';
 import 'widgets/media_picker_sheet.dart';
 
 class ComposeScreen extends ConsumerStatefulWidget {
@@ -77,12 +78,13 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
 
     if (mounted) {
       Navigator.of(context).pop();
-      showAppToast(context, 'Yorumun mekana tutturuldu.');
+      showAppToast(context, AppLocalizations.of(context)!.commentPosted);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final viewer = ref.watch(simulatedLocationProvider);
     final nearestPlace = ref.watch(feedRepositoryProvider).nearestPlaceTo(viewer);
 
@@ -101,14 +103,14 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Vazgeç', style: TextStyle(color: AppColors.textSecondary)),
+                    child: Text(l10n.cancel, style: const TextStyle(color: AppColors.textSecondary)),
                   ),
-                  const Text('Yeni yorum', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
+                  Text(l10n.newCommentTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15)),
                   TextButton(
                     onPressed: _submitting ? null : _submit,
-                    child: const Text(
-                      'Paylaş',
-                      style: TextStyle(color: AppColors.accent, fontWeight: FontWeight.w700),
+                    child: Text(
+                      l10n.shareAction,
+                      style: const TextStyle(color: AppColors.accent, fontWeight: FontWeight.w700),
                     ),
                   ),
                 ],
@@ -137,7 +139,7 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            'Şu an: ${nearestPlace.name}',
+                            l10n.currentlyAt(nearestPlace.name),
                             style: const TextStyle(
                               fontSize: 13,
                               fontWeight: FontWeight.w700,
@@ -156,8 +158,8 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                         maxLength: postTextMaxLength,
                         textAlignVertical: TextAlignVertical.top,
                         style: const TextStyle(fontSize: 16, height: 1.5),
-                        decoration: const InputDecoration(
-                          hintText: 'Burada ne oluyor? Düşünceni bu mekana tuttur...',
+                        decoration: InputDecoration(
+                          hintText: l10n.composeHint,
                           border: InputBorder.none,
                           filled: false,
                           contentPadding: EdgeInsets.zero,
@@ -183,10 +185,10 @@ class _ComposeScreenState extends ConsumerState<ComposeScreen> {
                           border: Border.all(color: AppColors.border, width: 1.5),
                         ),
                         child: _attachedMedia == null
-                            ? const Center(
+                            ? Center(
                                 child: Text(
-                                  '+ FOTOĞRAF / VİDEO EKLE',
-                                  style: TextStyle(
+                                  l10n.addPhotoVideo,
+                                  style: const TextStyle(
                                     fontFamily: 'monospace',
                                     fontSize: 13,
                                     color: AppColors.textSecondary,

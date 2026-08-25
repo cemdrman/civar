@@ -7,6 +7,7 @@ import '../../../core/routing/route_paths.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/widgets/pill_button.dart';
 import '../../../domain/repositories/auth_repository.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Email step of onboarding — doubles as sign-in and sign-up. Firebase's
 /// email-enumeration protection means we can't check in advance whether an
@@ -58,12 +59,13 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
       context.go(RoutePaths.map);
       return;
     }
+    final l10n = AppLocalizations.of(context)!;
     setState(() {
       _submitting = false;
       _offerRegistration = result.failureReason == SignInFailureReason.invalidCredentials;
       _errorText = result.failureReason == SignInFailureReason.invalidCredentials
-          ? 'E-posta veya şifre hatalı, ya da hesabın yok.'
-          : 'Bir şeyler ters gitti, tekrar dene.';
+          ? l10n.invalidCredentialsError
+          : l10n.genericErrorRetry;
     });
   }
 
@@ -84,13 +86,14 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
       if (!mounted) return;
       setState(() {
         _submitting = false;
-        _errorText = 'Hesap oluşturulamadı. E-posta zaten kayıtlı olabilir.';
+        _errorText = AppLocalizations.of(context)!.accountCreationFailed;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.all(32),
       child: Column(
@@ -104,14 +107,12 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
             ),
           ),
           Text(
-            _offerRegistration ? 'Hesap oluştur' : 'E-posta ile devam et',
+            _offerRegistration ? l10n.createAccountTitle : l10n.continueWithEmail,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22),
           ),
           const SizedBox(height: 6),
           Text(
-            _offerRegistration
-                ? 'Bu bilgilerle bir hesap yoksa, adını da yazıp yeni hesap oluşturalım.'
-                : 'Zaten hesabın varsa giriş yap, yoksa aşağıdan yeni hesap oluşturabilirsin.',
+            _offerRegistration ? l10n.createAccountSubtitle : l10n.signInSubtitle,
             style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
           const SizedBox(height: 20),
@@ -119,7 +120,7 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
             TextField(
               controller: _nameController,
               autofocus: true,
-              decoration: const InputDecoration(hintText: 'Ad Soyad'),
+              decoration: InputDecoration(hintText: l10n.fullNameHint),
               onChanged: (_) => setState(() {}),
             ),
             const SizedBox(height: 12),
@@ -127,14 +128,14 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
           TextField(
             controller: _emailController,
             keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(hintText: 'E-posta'),
+            decoration: InputDecoration(hintText: l10n.emailHint),
             onChanged: (_) => setState(() {}),
           ),
           const SizedBox(height: 12),
           TextField(
             controller: _passwordController,
             obscureText: true,
-            decoration: const InputDecoration(hintText: 'Şifre (en az 6 karakter)'),
+            decoration: InputDecoration(hintText: l10n.passwordHint),
             onChanged: (_) => setState(() {}),
           ),
           if (_errorText != null) ...[
@@ -144,18 +145,18 @@ class _AccountCreationStepState extends ConsumerState<AccountCreationStep> {
           const Spacer(),
           if (_offerRegistration)
             PillButton(
-              label: 'Hesap oluştur ve gir',
+              label: l10n.createAccountAndEnter,
               onPressed: _canRegister && !_submitting ? _register : null,
             )
           else ...[
             PillButton(
-              label: _submitting ? 'Giriş yapılıyor...' : 'Giriş yap',
+              label: _submitting ? l10n.signingIn : l10n.signIn,
               onPressed: _canSignIn && !_submitting ? _signIn : null,
             ),
             const SizedBox(height: 10),
             TextButton(
               onPressed: _submitting ? null : () => setState(() => _offerRegistration = true),
-              child: const Text('Hesabım yok, oluşturmak istiyorum'),
+              child: Text(l10n.noAccountCreateOne),
             ),
           ],
         ],

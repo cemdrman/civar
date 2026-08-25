@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radii.dart';
 import '../../../core/utils/media_validation.dart';
+import '../../../l10n/app_localizations.dart';
 
 /// Lets the user choose photo vs video before opening the OS picker, since
 /// image_picker exposes them as two separate calls (pickImage/pickVideo).
@@ -10,51 +11,54 @@ Future<MediaKind?> showMediaPickerSheet(BuildContext context) {
   return showModalBottomSheet<MediaKind>(
     context: context,
     backgroundColor: Colors.transparent,
-    builder: (sheetContext) => Container(
-      padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
-      decoration: const BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
-      ),
-      child: SafeArea(
-        top: false,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 36,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.border,
-                  borderRadius: BorderRadius.circular(2),
+    builder: (sheetContext) {
+      final l10n = AppLocalizations.of(sheetContext)!;
+      return Container(
+        padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
+        decoration: const BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
+        ),
+        child: SafeArea(
+          top: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Container(
+                  width: 36,
+                  height: 4,
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: AppColors.border,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
                 ),
               ),
-            ),
-            const Text('Ne eklemek istersin?', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-            const SizedBox(height: 8),
-            _OptionRow(
-              icon: Icons.image_outlined,
-              label: 'Fotoğraf seç',
-              sublabel: 'jpg, png, webp, heic · maks. 10MB',
-              onTap: () => Navigator.of(sheetContext).pop(MediaKind.image),
-            ),
-            _OptionRow(
-              icon: Icons.videocam_outlined,
-              label: 'Video seç',
-              sublabel: 'mp4, mov · maks. 50MB',
-              onTap: () => Navigator.of(sheetContext).pop(MediaKind.video),
-            ),
-            TextButton(
-              onPressed: () => Navigator.of(sheetContext).pop(),
-              child: const Text('Vazgeç', style: TextStyle(color: AppColors.textSecondary)),
-            ),
-          ],
+              Text(l10n.whatToAddTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
+              const SizedBox(height: 8),
+              _OptionRow(
+                icon: Icons.image_outlined,
+                label: l10n.choosePhoto,
+                sublabel: l10n.choosePhotoHint,
+                onTap: () => Navigator.of(sheetContext).pop(MediaKind.image),
+              ),
+              _OptionRow(
+                icon: Icons.videocam_outlined,
+                label: l10n.chooseVideo,
+                sublabel: l10n.chooseVideoHint,
+                onTap: () => Navigator.of(sheetContext).pop(MediaKind.video),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(sheetContext).pop(),
+                child: Text(l10n.cancel, style: const TextStyle(color: AppColors.textSecondary)),
+              ),
+            ],
+          ),
         ),
-      ),
-    ),
+      );
+    },
   );
 }
 

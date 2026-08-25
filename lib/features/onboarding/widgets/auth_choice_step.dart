@@ -8,6 +8,7 @@ import '../../../core/routing/route_paths.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../core/theme/app_radii.dart';
 import '../../../core/widgets/app_toast.dart';
+import '../../../l10n/app_localizations.dart';
 
 class AuthChoiceStep extends ConsumerStatefulWidget {
   const AuthChoiceStep({super.key, required this.onChooseEmail});
@@ -31,12 +32,12 @@ class _AuthChoiceStepState extends ConsumerState<AuthChoiceStep> {
       setState(() => _signingIn = false);
       // User closing the picker is normal, not an error worth surfacing.
       if (e.code != GoogleSignInExceptionCode.canceled) {
-        showAppToast(context, 'Google ile giriş yapılamadı, tekrar dene.');
+        showAppToast(context, AppLocalizations.of(context)!.googleSignInFailed);
       }
     } catch (_) {
       if (!mounted) return;
       setState(() => _signingIn = false);
-      showAppToast(context, 'Google ile giriş yapılamadı, tekrar dene.');
+      showAppToast(context, AppLocalizations.of(context)!.googleSignInFailed);
     }
   }
 
@@ -48,13 +49,13 @@ class _AuthChoiceStepState extends ConsumerState<AuthChoiceStep> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Hesabına eriş',
+            AppLocalizations.of(context)!.authAccessAccountTitle,
             style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 22),
           ),
           const SizedBox(height: 6),
-          const Text(
-            'Devam etmek için bir yöntem seç.',
-            style: TextStyle(fontSize: 14, color: AppColors.textSecondary),
+          Text(
+            AppLocalizations.of(context)!.authChooseMethodSubtitle,
+            style: const TextStyle(fontSize: 14, color: AppColors.textSecondary),
           ),
           const Spacer(),
           _GoogleButton(loading: _signingIn, onPressed: _signingIn ? null : _continueWithGoogle),
@@ -69,9 +70,9 @@ class _AuthChoiceStepState extends ConsumerState<AuthChoiceStep> {
                 padding: const EdgeInsets.symmetric(vertical: 16),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadii.pill)),
               ),
-              child: const Text(
-                'E-posta ile devam et',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              child: Text(
+                AppLocalizations.of(context)!.continueWithEmail,
+                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -120,9 +121,9 @@ class _GoogleButton extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(width: 10),
-                  const Text(
-                    'Google ile devam et',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                  Text(
+                    AppLocalizations.of(context)!.continueWithGoogle,
+                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ],
               ),

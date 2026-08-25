@@ -13,6 +13,7 @@ import '../../core/widgets/app_toast.dart';
 import '../../core/widgets/comment_card.dart';
 import '../../core/widgets/locked_banner.dart';
 import '../../core/widgets/placeholder_box.dart';
+import '../../l10n/app_localizations.dart';
 import '../report/report_sheet.dart';
 
 class PlaceDetailScreen extends ConsumerStatefulWidget {
@@ -38,11 +39,12 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
     if (text.isEmpty || text.length > postTextMaxLength) return;
     await ref.read(feedRepositoryProvider).createPost(placeId: placeId, text: text, hasMedia: false);
     _replyController.clear();
-    if (mounted) showAppToast(context, 'Yorumun mekana tutturuldu.');
+    if (mounted) showAppToast(context, AppLocalizations.of(context)!.commentPosted);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final places = ref.watch(placesStreamProvider).value ?? const [];
     final place = places.where((p) => p.id == widget.placeId).firstOrNull;
     final postsAsync = ref.watch(placePostsStreamProvider(widget.placeId));
@@ -68,9 +70,9 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
                       height: 150,
                       child: Stack(
                         children: [
-                          const Positioned.fill(
+                          Positioned.fill(
                             child: PlaceholderBox(
-                              label: 'MEKAN FOTOĞRAFI',
+                              label: l10n.placePhotoLabel,
                               tint: PlaceholderTint.accent,
                               borderRadius: 0,
                             ),
@@ -107,7 +109,11 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
                           ),
                           const SizedBox(height: 3),
                           Text(
-                            '${place.category} · ${haversineKm(viewer, place.location).toStringAsFixed(1)} km · ${posts.length} yorum',
+                            l10n.placeDetailMeta(
+                              place.category,
+                              haversineKm(viewer, place.location).toStringAsFixed(1),
+                              posts.length,
+                            ),
                             style: const TextStyle(fontSize: 13, color: AppColors.textSecondary),
                           ),
                         ],
@@ -169,7 +175,7 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
                                 controller: _replyController,
                                 maxLength: postTextMaxLength,
                                 decoration: InputDecoration(
-                                  hintText: 'Bu mekana yorum yaz...',
+                                  hintText: l10n.writeCommentHint,
                                   filled: true,
                                   fillColor: AppColors.surface2,
                                   counterText: '',
@@ -200,10 +206,10 @@ class _PlaceDetailScreenState extends ConsumerState<PlaceDetailScreen> {
                         ),
                       ],
                     )
-                  : const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 8),
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
                       child: LockedBanner(
-                        message: 'Cevap vermek için bu mekana yakın olmalısın',
+                        message: l10n.replyLockedMessage,
                         compact: true,
                       ),
                     ),

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app_state/auth_providers.dart';
+import '../../app_state/locale_providers.dart';
 import '../../app_state/location_providers.dart';
 import '../../app_state/membership_providers.dart';
 import '../../app_state/repository_providers.dart';
@@ -11,6 +12,7 @@ import '../../core/routing/route_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../domain/repositories/location_repository.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Presentational seed data for the "Yorumların" grid — matches the design's
 /// MY_POSTS constant. Not modeled as a domain entity since it's static display
@@ -27,6 +29,7 @@ class ProfileScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider).value;
     final tier = ref.watch(currentTierProvider).value;
 
@@ -70,7 +73,7 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      '${tier?.label ?? ''} planı',
+                      l10n.currentPlanLabel(tier?.label ?? ''),
                       style: const TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w700,
@@ -81,7 +84,7 @@ class ProfileScreen extends ConsumerWidget {
                     GestureDetector(
                       onTap: () => context.push(RoutePaths.editProfile),
                       child: Text(
-                        (user?.bio.isNotEmpty ?? false) ? user!.bio : 'Biyografini ekle',
+                        (user?.bio.isNotEmpty ?? false) ? user!.bio : l10n.addBio,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -106,11 +109,11 @@ class ProfileScreen extends ConsumerWidget {
               border: Border.all(color: AppColors.border),
               borderRadius: BorderRadius.circular(AppRadii.card - 2),
             ),
-            child: const Row(
+            child: Row(
               children: [
-                _StatCell(value: '14', label: 'Yorum', showDivider: true),
-                _StatCell(value: '212', label: 'Beğeni', showDivider: true),
-                _StatCell(value: '9', label: 'Mekan', showDivider: false),
+                _StatCell(value: '14', label: l10n.statComments, showDivider: true),
+                _StatCell(value: '212', label: l10n.statLikes, showDivider: true),
+                _StatCell(value: '9', label: l10n.statPlaces, showDivider: false),
               ],
             ),
           ),
@@ -130,7 +133,7 @@ class ProfileScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '${tier?.radiusLabel ?? ''} çap aktif',
+                        l10n.activeRadiusLabel(tier?.radiusLabel ?? ''),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w700,
@@ -138,9 +141,9 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ),
                       const SizedBox(height: 3),
-                      const Text(
-                        'Planını yönet veya yükselt',
-                        style: TextStyle(color: Colors.white70, fontSize: 12.5),
+                      Text(
+                        l10n.managePlanSubtitle,
+                        style: const TextStyle(color: Colors.white70, fontSize: 12.5),
                       ),
                     ],
                   ),
@@ -150,7 +153,7 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 20),
-          const Text('Yorumların', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
+          Text(l10n.yourCommentsTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
           const SizedBox(height: 10),
           GridView.count(
             crossAxisCount: 2,
@@ -200,14 +203,18 @@ class ProfileScreen extends ConsumerWidget {
             child: Column(
               children: [
                 _SettingsRow(
-                  label: 'Profili düzenle',
+                  label: l10n.editProfile,
                   onTap: () => context.push(RoutePaths.editProfile),
                 ),
-                const _SettingsRow(label: 'Bildirimler'),
-                const _SettingsRow(label: 'Gizlilik'),
-                const _SettingsRow(label: 'Engellenenler'),
+                _SettingsRow(label: l10n.notifications),
+                _SettingsRow(label: l10n.privacy),
+                _SettingsRow(label: l10n.blockedUsers),
                 _SettingsRow(
-                  label: 'Çıkış yap',
+                  label: l10n.languageSettingsLabel,
+                  onTap: () => _openLanguagePicker(context, ref),
+                ),
+                _SettingsRow(
+                  label: l10n.signOut,
                   color: AppColors.danger,
                   showDivider: false,
                   onTap: () => ref.read(authRepositoryProvider).signOut(),
@@ -217,9 +224,9 @@ class ProfileScreen extends ConsumerWidget {
           ),
           if (kDebugMode) ...[
             const SizedBox(height: 20),
-            const Text(
-              'Dev: Konumu değiştir',
-              style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textFaint),
+            Text(
+              l10n.devChangeLocation,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13, color: AppColors.textFaint),
             ),
             const SizedBox(height: 8),
             Wrap(
@@ -236,6 +243,97 @@ class ProfileScreen extends ConsumerWidget {
             ),
           ],
         ],
+      ),
+    );
+  }
+
+  void _openLanguagePicker(BuildContext context, WidgetRef ref) {
+    final currentLocale = ref.read(localeProvider);
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (sheetContext) => _LanguagePickerSheet(
+        currentLanguageCode: currentLocale.languageCode,
+        onSelect: (code) {
+          ref.read(localeProvider.notifier).setLocale(Locale(code));
+          Navigator.of(sheetContext).pop();
+        },
+      ),
+    );
+  }
+}
+
+const _languageOptions = [
+  ('tr', 'Türkçe'),
+  ('en', 'English'),
+  ('ar', 'العربية'),
+  ('pt', 'Português'),
+  ('fr', 'Français'),
+];
+
+class _LanguagePickerSheet extends StatelessWidget {
+  const _LanguagePickerSheet({required this.currentLanguageCode, required this.onSelect});
+
+  final String currentLanguageCode;
+  final ValueChanged<String> onSelect;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Container(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
+      decoration: const BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadii.sheet)),
+      ),
+      child: SafeArea(
+        top: false,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 36,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.border,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text(
+              l10n.languagePickerTitle,
+              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            ),
+            const SizedBox(height: 8),
+            for (final (code, name) in _languageOptions)
+              InkWell(
+                onTap: () => onSelect(code),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
+                  decoration: const BoxDecoration(
+                    border: Border(bottom: BorderSide(color: AppColors.border)),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 14.5,
+                          fontWeight: code == currentLanguageCode ? FontWeight.w700 : FontWeight.w400,
+                        ),
+                      ),
+                      if (code == currentLanguageCode)
+                        const Icon(Icons.check, size: 18, color: AppColors.accent),
+                    ],
+                  ),
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

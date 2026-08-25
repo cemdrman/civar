@@ -1,0 +1,340 @@
+{
+  "@@locale": "en",
+
+  "cancel": "Cancel",
+  "@cancel": { "description": "Generic cancel button label used in bottom sheets." },
+
+  "save": "Save",
+  "@save": { "description": "Save button label on edit profile." },
+
+  "genericErrorRetry": "Something went wrong, try again.",
+  "@genericErrorRetry": { "description": "Generic error toast when an action fails without a specific reason." },
+
+  "streamError": "Something went wrong: {error}",
+  "@streamError": {
+    "description": "Shown when a live data stream (feed, DM list, DM thread) errors out.",
+    "placeholders": { "error": { "type": "Object" } }
+  },
+
+  "commentPosted": "Your comment was posted to the venue.",
+  "@commentPosted": { "description": "Toast shown after successfully posting a comment/reply." },
+
+  "unlimitedRadius": "Unlimited",
+  "@unlimitedRadius": { "description": "Label used instead of a numeric radius when the radius is unlimited." },
+
+  "radiusSuffix": "{radius} radius",
+  "@radiusSuffix": {
+    "description": "Radius value followed by the word 'radius', e.g. '20 km radius'.",
+    "placeholders": { "radius": { "type": "String" } }
+  },
+
+  "exploreLabel": "Explore",
+  "@exploreLabel": { "description": "Feed tab/section title, also used as the bottom nav label." },
+
+  "mapLabel": "Map",
+  "@mapLabel": { "description": "Map tab/section title, also used as the bottom nav label." },
+
+  "messagesLabel": "Messages",
+  "@messagesLabel": { "description": "DM list tab/section title, also used as the bottom nav label." },
+
+  "profileLabel": "Profile",
+  "@profileLabel": { "description": "Bottom nav label for the profile tab." },
+
+  "editProfile": "Edit profile",
+  "@editProfile": { "description": "Settings row label and edit-profile screen title." },
+
+  "onboardingTagline": "What's really happening around you? See and join comments, only where you are.",
+  "@onboardingTagline": { "description": "Subtitle on the onboarding welcome screen." },
+
+  "onboardingStart": "Start",
+  "@onboardingStart": { "description": "Button on the onboarding welcome screen." },
+
+  "authAccessAccountTitle": "Access your account",
+  "@authAccessAccountTitle": { "description": "Title of the onboarding auth-choice step." },
+
+  "authChooseMethodSubtitle": "Choose a way to continue.",
+  "@authChooseMethodSubtitle": { "description": "Subtitle of the onboarding auth-choice step." },
+
+  "continueWithEmail": "Continue with email",
+  "@continueWithEmail": { "description": "Button to continue onboarding with email instead of Google." },
+
+  "continueWithGoogle": "Continue with Google",
+  "@continueWithGoogle": { "description": "Google sign-in button label." },
+
+  "googleSignInFailed": "Couldn't sign in with Google, try again.",
+  "@googleSignInFailed": { "description": "Toast shown when Google sign-in fails." },
+
+  "createAccountTitle": "Create account",
+  "@createAccountTitle": { "description": "Title shown when the email step offers registration." },
+
+  "createAccountSubtitle": "If there's no account with this info, add your name and we'll create a new one.",
+  "@createAccountSubtitle": { "description": "Subtitle shown when the email step offers registration." },
+
+  "signInSubtitle": "Sign in if you already have an account, or create a new one below.",
+  "@signInSubtitle": { "description": "Subtitle shown on the initial email step before registration is offered." },
+
+  "fullNameHint": "Full name",
+  "@fullNameHint": { "description": "Hint text for the full name field." },
+
+  "emailHint": "Email",
+  "@emailHint": { "description": "Hint text for the email field." },
+
+  "passwordHint": "Password (at least 6 characters)",
+  "@passwordHint": { "description": "Hint text for the password field." },
+
+  "invalidCredentialsError": "Wrong email or password, or you don't have an account.",
+  "@invalidCredentialsError": { "description": "Error shown when sign-in fails with invalid credentials." },
+
+  "accountCreationFailed": "Couldn't create account. The email might already be registered.",
+  "@accountCreationFailed": { "description": "Error shown when account registration fails." },
+
+  "createAccountAndEnter": "Create account and enter",
+  "@createAccountAndEnter": { "description": "Button to submit registration." },
+
+  "signingIn": "Signing in...",
+  "@signingIn": { "description": "Sign-in button label while the request is in flight." },
+
+  "signIn": "Sign in",
+  "@signIn": { "description": "Sign-in button label." },
+
+  "noAccountCreateOne": "I don't have an account, I want to create one",
+  "@noAccountCreateOne": { "description": "Link to switch from sign-in to registration." },
+
+  "locationPermissionIllustrationLabel": "LOCATION PERMISSION ILLUSTRATION",
+  "@locationPermissionIllustrationLabel": { "description": "Placeholder label over the location-permission illustration." },
+
+  "locationNeededTitle": "We need your location",
+  "@locationNeededTitle": { "description": "Title on the onboarding location-permission step." },
+
+  "locationPermissionExplainer": "Civar only shows comments within a {radius} radius. You can only increase this radius with a monthly membership.",
+  "@locationPermissionExplainer": {
+    "description": "Body text on the onboarding location-permission step.",
+    "placeholders": { "radius": { "type": "String" } }
+  },
+
+  "allowLocationAccess": "Allow my location",
+  "@allowLocationAccess": { "description": "Button to grant location permission." },
+
+  "notNow": "Not now",
+  "@notNow": { "description": "Button to skip granting location permission for now." },
+
+  "noCommentsInRadius": "No comments in this radius yet.",
+  "@noCommentsInRadius": { "description": "Empty state on the feed when there are no posts in range." },
+
+  "feedSubtitle": "Recent comments around you",
+  "@feedSubtitle": { "description": "Subtitle under the Explore/feed header." },
+
+  "mapPlaceholderLabel": "MAP VIEW · density layer",
+  "@mapPlaceholderLabel": { "description": "Placeholder label over the map view." },
+
+  "noCommentsYetWriteFirst": "No comments yet, be the first to write one.",
+  "@noCommentsYetWriteFirst": { "description": "Teaser text on a map place preview with no posts yet." },
+
+  "viewCommentsCount": "{count, plural, one{View {count} comment} other{View {count} comments}}",
+  "@viewCommentsCount": {
+    "description": "Button on the map place-preview sheet to open a place's comments.",
+    "placeholders": { "count": { "type": "num", "format": "compact" } }
+  },
+
+  "newCommentTitle": "New comment",
+  "@newCommentTitle": { "description": "Title of the compose screen's header." },
+
+  "shareAction": "Share",
+  "@shareAction": { "description": "Button to submit a new comment on the compose screen." },
+
+  "currentlyAt": "Now at: {place}",
+  "@currentlyAt": {
+    "description": "Shows the place the user is about to post to on the compose screen.",
+    "placeholders": { "place": { "type": "String" } }
+  },
+
+  "composeHint": "What's happening here? Pin your thought to this place...",
+  "@composeHint": { "description": "Hint text in the compose text field." },
+
+  "addPhotoVideo": "+ ADD PHOTO / VIDEO",
+  "@addPhotoVideo": { "description": "Placeholder label on the empty media-attach slot in compose." },
+
+  "photoVideoLabel": "PHOTO / VIDEO",
+  "@photoVideoLabel": { "description": "Placeholder label over an attached photo/video on a comment card." },
+
+  "whatToAddTitle": "What do you want to add?",
+  "@whatToAddTitle": { "description": "Title of the media-picker bottom sheet." },
+
+  "choosePhoto": "Choose photo",
+  "@choosePhoto": { "description": "Option to attach a photo." },
+
+  "choosePhotoHint": "jpg, png, webp, heic · max. 10MB",
+  "@choosePhotoHint": { "description": "Supported photo formats/size sublabel." },
+
+  "chooseVideo": "Choose video",
+  "@chooseVideo": { "description": "Option to attach a video." },
+
+  "chooseVideoHint": "mp4, mov · max. 50MB",
+  "@chooseVideoHint": { "description": "Supported video formats/size sublabel." },
+
+  "placePhotoLabel": "VENUE PHOTO",
+  "@placePhotoLabel": { "description": "Placeholder label over the place-detail hero photo." },
+
+  "placeDetailMeta": "{category} · {distance} km · {count} comments",
+  "@placeDetailMeta": {
+    "description": "Meta line under a place's name on the place-detail screen.",
+    "placeholders": {
+      "category": { "type": "String" },
+      "distance": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+
+  "writeCommentHint": "Write a comment for this place...",
+  "@writeCommentHint": { "description": "Hint text on the place-detail reply field." },
+
+  "replyLockedMessage": "You need to be close to this place to reply",
+  "@replyLockedMessage": { "description": "Shown instead of the reply field when the viewer is out of range." },
+
+  "reportThanks": "Thanks for reporting, our team will review it.",
+  "@reportThanks": { "description": "Toast shown after submitting a report." },
+
+  "reportThisComment": "Report this comment",
+  "@reportThisComment": { "description": "Title of the report-reason bottom sheet." },
+
+  "currentPlanLabel": "{tier} plan",
+  "@currentPlanLabel": {
+    "description": "Shows the viewer's current membership tier under their name on the profile screen.",
+    "placeholders": { "tier": { "type": "String" } }
+  },
+
+  "addBio": "Add a bio",
+  "@addBio": { "description": "Placeholder shown instead of a bio when the user hasn't written one." },
+
+  "statComments": "Comments",
+  "@statComments": { "description": "Profile stat cell label for comment count." },
+
+  "statLikes": "Likes",
+  "@statLikes": { "description": "Profile stat cell label for like count." },
+
+  "statPlaces": "Places",
+  "@statPlaces": { "description": "Profile stat cell label for place count." },
+
+  "activeRadiusLabel": "{radius} radius active",
+  "@activeRadiusLabel": {
+    "description": "Shown on the profile screen's plan banner.",
+    "placeholders": { "radius": { "type": "String" } }
+  },
+
+  "managePlanSubtitle": "Manage or upgrade your plan",
+  "@managePlanSubtitle": { "description": "Subtitle under the active-radius banner on the profile screen." },
+
+  "yourCommentsTitle": "Your comments",
+  "@yourCommentsTitle": { "description": "Section title over the user's own posts grid on the profile screen." },
+
+  "notifications": "Notifications",
+  "@notifications": { "description": "Settings row label." },
+
+  "privacy": "Privacy",
+  "@privacy": { "description": "Settings row label." },
+
+  "blockedUsers": "Blocked",
+  "@blockedUsers": { "description": "Settings row label." },
+
+  "signOut": "Sign out",
+  "@signOut": { "description": "Settings row label to sign out." },
+
+  "languageSettingsLabel": "Language",
+  "@languageSettingsLabel": { "description": "Settings row label that opens the language picker." },
+
+  "languagePickerTitle": "Choose language",
+  "@languagePickerTitle": { "description": "Title of the language-picker bottom sheet." },
+
+  "devChangeLocation": "Dev: Change location",
+  "@devChangeLocation": { "description": "Debug-only section title for the QA location presets, kDebugMode only." },
+
+  "photoUploadFailed": "Couldn't upload photo, try again.",
+  "@photoUploadFailed": { "description": "Toast shown when a profile photo upload fails." },
+
+  "profileUpdated": "Your profile was updated.",
+  "@profileUpdated": { "description": "Toast shown after successfully saving profile edits." },
+
+  "changeProfilePhoto": "Change profile photo",
+  "@changeProfilePhoto": { "description": "Button under the avatar on the edit-profile screen." },
+
+  "bioLabel": "Bio",
+  "@bioLabel": { "description": "Section title over the bio field on the edit-profile screen." },
+
+  "bioHint": "Tell us a bit about yourself...",
+  "@bioHint": { "description": "Hint text for the bio field." },
+
+  "bioLinkNotAllowed": "You can't share a link in your bio.",
+  "@bioLinkNotAllowed": { "description": "Validation error shown under the bio field when it contains a link." },
+
+  "whoToMessageTitle": "Who do you want to talk to?",
+  "@whoToMessageTitle": { "description": "Title of the new-message picker dialog." },
+
+  "newMessage": "New message",
+  "@newMessage": { "description": "Button to start a new DM thread." },
+
+  "freeTierDmLockedMessage": "Free members can't start new chats, but can reply to incoming messages.",
+  "@freeTierDmLockedMessage": { "description": "Banner shown on the DM list when the viewer can't start new chats." },
+
+  "writeMessageHint": "Write a message...",
+  "@writeMessageHint": { "description": "Hint text on the DM chat input field." },
+
+  "expandYourRadius": "Expand your radius",
+  "@expandYourRadius": { "description": "Paywall screen title." },
+
+  "paywallExplainer": "Upgrade to see and reply to comments in a wider radius, and to message people.",
+  "@paywallExplainer": { "description": "Explainer paragraph at the top of the paywall screen." },
+
+  "firstMonthDiscountBanner": "🎉 Special for your first membership: 50% off all plans for the first month!",
+  "@firstMonthDiscountBanner": { "description": "Discount banner on the paywall screen." },
+
+  "checkingEllipsis": "Checking...",
+  "@checkingEllipsis": { "description": "Restore-purchases button label while the request is in flight." },
+
+  "restorePurchases": "Restore purchases",
+  "@restorePurchases": { "description": "Button to restore previous purchases." },
+
+  "planDowngraded": "Your plan was downgraded to {tier}.",
+  "@planDowngraded": {
+    "description": "Toast shown after switching to a lower/free tier.",
+    "placeholders": { "tier": { "type": "String" } }
+  },
+
+  "planUpgraded": "Your plan was upgraded to {tier}.",
+  "@planUpgraded": {
+    "description": "Toast shown after a successful upgrade purchase.",
+    "placeholders": { "tier": { "type": "String" } }
+  },
+
+  "purchaseNotCompleted": "Purchase couldn't be completed.",
+  "@purchaseNotCompleted": { "description": "Fallback error toast when a purchase fails without a specific reason." },
+
+  "noPurchasesToRestore": "No purchases found to restore.",
+  "@noPurchasesToRestore": { "description": "Toast shown when restoring purchases finds nothing." },
+
+  "firstMonthDiscountTag": "50% off your first month",
+  "@firstMonthDiscountTag": { "description": "Small discount tag on a tier card." },
+
+  "currentPlanBadge": "Your current plan",
+  "@currentPlanBadge": { "description": "Badge shown on the tier card matching the viewer's current plan." },
+
+  "purchasing": "Purchasing...",
+  "@purchasing": { "description": "Tier card button label while a purchase is in flight." },
+
+  "switchToThisPlan": "Switch to this plan",
+  "@switchToThisPlan": { "description": "Tier card button label to select a plan." },
+
+  "replyCountLabel": "{count, plural, one{{count} reply} other{{count} replies}} · Reply",
+  "@replyCountLabel": {
+    "description": "Reply count + call-to-action shown under a comment card.",
+    "placeholders": { "count": { "type": "num", "format": "compact" } }
+  },
+
+  "movedAwayFromLocation": "You've moved away from this location",
+  "@movedAwayFromLocation": { "description": "Shown instead of the reply link when the viewer left the post's range." },
+
+  "placeTagDistance": "{place} · {distance} km",
+  "@placeTagDistance": {
+    "description": "Tappable place-name pill on a comment card, with distance.",
+    "placeholders": { "place": { "type": "String" }, "distance": { "type": "String" } }
+  }
+}
