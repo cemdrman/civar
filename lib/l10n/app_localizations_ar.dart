@@ -59,12 +59,6 @@ class AppLocalizationsAr extends AppLocalizations {
   String get authAccessAccountTitle => 'الدخول إلى حسابك';
 
   @override
-  String get authChooseMethodSubtitle => 'اختر طريقة للمتابعة.';
-
-  @override
-  String get continueWithEmail => 'المتابعة بالبريد الإلكتروني';
-
-  @override
   String get continueWithGoogle => 'المتابعة باستخدام Google';
 
   @override
@@ -76,7 +70,7 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get createAccountSubtitle =>
-      'إذا لم يكن هناك حساب بهذه البيانات، أضف اسمك وسننشئ لك حسابًا جديدًا.';
+      'أدخل بياناتك أدناه وسننشئ حسابك خلال ثوانٍ.';
 
   @override
   String get signInSubtitle =>
@@ -367,4 +361,48 @@ class AppLocalizationsAr extends AppLocalizations {
   String placeTagDistance(String place, String distance) {
     return '$place · $distance كم';
   }
+
+  @override
+  String get orDividerLabel => 'أو';
+
+  @override
+  String get noOwnPostsYet => 'لم تكتب أي تعليقات بعد.';
+
+  @override
+  String get blockedUsersScreenTitle => 'المحظورون';
+
+  @override
+  String get noBlockedUsersMessage => 'لم تحظر أحدًا بعد.';
+
+  @override
+  String get blockUserAction => 'حظر';
+
+  @override
+  String get unblockUserAction => 'إلغاء الحظر';
+
+  @override
+  String get blockUserConfirmTitle => 'هل تريد حظر هذا المستخدم؟';
+
+  @override
+  String blockUserConfirmMessage(String name) {
+    return 'لن يتمكن $name من مراسلتك بعد الآن. يمكنك إلغاء الحظر في أي وقت من ملفك الشخصي.';
+  }
+
+  @override
+  String userBlockedToast(String name) {
+    return 'تم حظر $name.';
+  }
+
+  @override
+  String get deleteAccountLabel => 'حذف حسابي';
+
+  @override
+  String get deleteAccountConfirmTitle => 'هل تريد حذف حسابك؟';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'سيتم إلغاء تفعيل حسابك وتسجيل خروجك. لن يتم حذف تعليقاتك ورسائلك الحالية.';
+
+  @override
+  String get deleteAccountConfirmButton => 'حذف الحساب';
 }

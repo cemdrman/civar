@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:latlong2/latlong.dart' as ll;
 
 import '../../app_state/feed_providers.dart';
 import '../../app_state/location_providers.dart';
@@ -9,12 +11,13 @@ import '../../core/routing/route_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
 import '../../core/utils/geo_utils.dart';
-import '../../core/widgets/placeholder_box.dart';
 import '../../domain/models/place.dart';
 import '../../domain/models/post.dart';
 import '../../l10n/app_localizations.dart';
 import 'widgets/place_pin.dart';
 import 'widgets/place_preview_sheet.dart';
+
+ll.LatLng _toLL(LatLng p) => ll.LatLng(p.lat, p.lng);
 
 class MapScreen extends ConsumerStatefulWidget {
   const MapScreen({super.key});
@@ -25,6 +28,14 @@ class MapScreen extends ConsumerStatefulWidget {
 
 class _MapScreenState extends ConsumerState<MapScreen> {
   String? _selectedPlaceId;
+  final _mapController = MapController();
+  bool _centeredOnce = false;
+
+  @override
+  void dispose() {
+    _mapController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +51,13 @@ class _MapScreenState extends ConsumerState<MapScreen> {
 
     final selectedPlace =
         _selectedPlaceId == null ? null : places.where((p) => p.id == _selectedPlaceId).firstOrNull;
+
+    if (!_centeredOnce && places.isNotEmpty) {
+      _centeredOnce = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _mapController.move(_toLL(viewer), 12);
+      });
+    }
 
     return SafeArea(
       child: Column(
@@ -82,34 +100,99 @@ class _MapScreenState extends ConsumerState<MapScreen> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.fromLTRB(18, 0, 18, 14),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        child: PlaceholderBox(label: l10n.mapPlaceholderLabel),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppRadii.card),
+                child: Stack(
+                  children: [
+                    FlutterMap(
+                      mapController: _mapController,
+                      options: MapOptions(
+                        initialCenter: _toLL(viewer),
+                        initialZoom: 12,
+                        minZoom: 3,
+                        maxZoom: 18,
+                        onTap: (_, _) => setState(() => _selectedPlaceId = null),
                       ),
-                      for (final place in places)
-                        _HeatCircle(place: place, canvasSize: constraints.biggest),
-                      for (final place in places)
-                        Positioned(
-                          left: place.mapAnchor.dx * constraints.maxWidth - 8,
-                          top: place.mapAnchor.dy * constraints.maxHeight - 8,
-                          child: PlacePin(
-                            commentCount: posts.where((p) => p.placeId == place.id).length,
-                            onTap: () => setState(() => _selectedPlaceId = place.id),
+                      children: [
+                        TileLayer(
+                          urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          userAgentPackageName: 'com.civar.civar',
+                          maxZoom: 19,
+                        ),
+                        CircleLayer(
+                          circles: [
+                            for (final place in places)
+                              CircleMarker(
+                                point: _toLL(place.location),
+                                radius: 60 + place.heat * 220,
+                                useRadiusInMeter: true,
+                                color: AppColors.accentSoft.withValues(alpha: 0.45),
+                                borderStrokeWidth: 0,
+                              ),
+                          ],
+                        ),
+                        MarkerLayer(
+                          markers: [
+                            Marker(
+                              point: _toLL(viewer),
+                              width: 20,
+                              height: 20,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: AppColors.accentDark,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.white, width: 3),
+                                  boxShadow: const [
+                                    BoxShadow(color: Colors.black38, blurRadius: 6, offset: Offset(0, 2)),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            for (final place in places)
+                              Marker(
+                                point: _toLL(place.location),
+                                width: 44,
+                                height: 44,
+                                alignment: Alignment.topCenter,
+                                child: PlacePin(
+                                  commentCount: posts.where((p) => p.placeId == place.id).length,
+                                  onTap: () => setState(() => _selectedPlaceId = place.id),
+                                ),
+                              ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 8, right: 8),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: RichAttributionWidget(
+                              attributions: [
+                                TextSourceAttribution(
+                                  'OpenStreetMap contributors',
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      if (selectedPlace != null)
-                        Positioned(
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          child: _buildPreview(context, selectedPlace, posts, viewer),
-                        ),
-                    ],
-                  );
-                },
+                      ],
+                    ),
+                    Positioned(
+                      right: 10,
+                      top: 10,
+                      child: _RecenterButton(
+                        onTap: () => _mapController.move(_toLL(viewer), 13),
+                      ),
+                    ),
+                    if (selectedPlace != null)
+                      Positioned(
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: _buildPreview(context, selectedPlace, posts, viewer),
+                      ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -138,30 +221,25 @@ class _MapScreenState extends ConsumerState<MapScreen> {
   }
 }
 
-class _HeatCircle extends StatelessWidget {
-  const _HeatCircle({required this.place, required this.canvasSize});
+class _RecenterButton extends StatelessWidget {
+  const _RecenterButton({required this.onTap});
 
-  final Place place;
-  final Size canvasSize;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    final size = 60 + place.heat * 220;
-    return Positioned(
-      left: place.mapAnchor.dx * canvasSize.width - size / 2,
-      top: place.mapAnchor.dy * canvasSize.height - size / 2,
-      child: IgnorePointer(
-        child: Container(
-          width: size,
-          height: size,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: [AppColors.accentSoft.withValues(alpha: 0.9), AppColors.accentSoft.withValues(alpha: 0)],
-              stops: const [0, 0.72],
-            ),
-          ),
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.border),
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 6, offset: Offset(0, 2))],
         ),
+        child: const Icon(Icons.my_location, size: 18, color: AppColors.accentDark),
       ),
     );
   }

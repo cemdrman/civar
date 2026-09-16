@@ -1,6 +1,5 @@
 {
   "@@locale": "tr",
-
   "cancel": "Vazgeç",
   "save": "Kaydet",
   "genericErrorRetry": "Bir şeyler ters gitti, tekrar dene.",
@@ -16,12 +15,10 @@
   "onboardingTagline": "Çevrende gerçekten neler oluyor? Sadece bulunduğun yerdeki yorumları gör, konuş.",
   "onboardingStart": "Başla",
   "authAccessAccountTitle": "Hesabına eriş",
-  "authChooseMethodSubtitle": "Devam etmek için bir yöntem seç.",
-  "continueWithEmail": "E-posta ile devam et",
   "continueWithGoogle": "Google ile devam et",
   "googleSignInFailed": "Google ile giriş yapılamadı, tekrar dene.",
   "createAccountTitle": "Hesap oluştur",
-  "createAccountSubtitle": "Bu bilgilerle bir hesap yoksa, adını da yazıp yeni hesap oluşturalım.",
+  "createAccountSubtitle": "Bilgilerini gir, hesabını saniyeler içinde oluşturalım.",
   "signInSubtitle": "Zaten hesabın varsa giriş yap, yoksa aşağıdan yeni hesap oluşturabilirsin.",
   "fullNameHint": "Ad Soyad",
   "emailHint": "E-posta",
@@ -99,5 +96,18 @@
   "switchToThisPlan": "Bu plana geç",
   "replyCountLabel": "{count} yanıt · Cevapla",
   "movedAwayFromLocation": "Konumundan uzaklaştın",
-  "placeTagDistance": "{place} · {distance} km"
+  "placeTagDistance": "{place} · {distance} km",
+  "orDividerLabel": "veya",
+  "noOwnPostsYet": "Henüz yorum yapmadın.",
+  "blockedUsersScreenTitle": "Engellenenler",
+  "noBlockedUsersMessage": "Henüz kimseyi engellemedin.",
+  "blockUserAction": "Engelle",
+  "unblockUserAction": "Engeli kaldır",
+  "blockUserConfirmTitle": "Bu kullanıcıyı engellemek istiyor musun?",
+  "blockUserConfirmMessage": "{name} artık sana mesaj gönderemez. İstediğin zaman profilinden engeli kaldırabilirsin.",
+  "userBlockedToast": "{name} kullanıcısını engelledin.",
+  "deleteAccountLabel": "Hesabımı sil",
+  "deleteAccountConfirmTitle": "Hesabını silmek istiyor musun?",
+  "deleteAccountConfirmMessage": "Hesabın pasif hale getirilecek ve oturumun kapatılacak. Mevcut yorumların ve mesajların silinmeyecek.",
+  "deleteAccountConfirmButton": "Hesabı sil"
 }

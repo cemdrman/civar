@@ -69,6 +69,7 @@ class FirebaseAuthRepository implements AuthRepository {
     await _userDoc(user.id).set({
       ..._profileFields(user),
       'tierId': TierId.free.name,
+      'active': true,
       'createdAt': FieldValue.serverTimestamp(),
     });
     await credential.user!.updateDisplayName(fullName);
@@ -79,9 +80,17 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<SignInResult> signInWithEmail({required String email, required String password}) async {
     try {
       final credential = await _auth.signInWithEmailAndPassword(email: email, password: password);
-      final doc = await _userDoc(credential.user!.uid).get();
+      final docRef = _userDoc(credential.user!.uid);
+      final doc = await docRef.get();
       if (!doc.exists) {
         return const SignInResult.failure(SignInFailureReason.other);
+      }
+      // A previously soft-deleted (deactivated) account is implicitly
+      // reactivated by signing back in with the same credentials — see
+      // deactivateAccount() doc comment for why this is the pragmatic
+      // choice over leaving `active` false forever.
+      if (doc.data()?['active'] == false) {
+        await docRef.update({'active': true, 'deletedAt': FieldValue.delete()});
       }
       return SignInResult.success(_userFromDoc(doc));
     } on fb_auth.FirebaseAuthException catch (e) {
@@ -105,6 +114,11 @@ class FirebaseAuthRepository implements AuthRepository {
     final docRef = _userDoc(fbUser.uid);
     final existing = await docRef.get();
     if (existing.exists) {
+      // See signInWithEmail() for why re-signing-in implicitly reactivates
+      // a soft-deleted account.
+      if (existing.data()?['active'] == false) {
+        await docRef.update({'active': true, 'deletedAt': FieldValue.delete()});
+      }
       return _userFromDoc(existing);
     }
 
@@ -114,6 +128,7 @@ class FirebaseAuthRepository implements AuthRepository {
     await docRef.set({
       ..._profileFields(user),
       'tierId': TierId.free.name,
+      'active': true,
       'createdAt': FieldValue.serverTimestamp(),
     });
     return user;
@@ -136,5 +151,56 @@ class FirebaseAuthRepository implements AuthRepository {
   Future<void> signOut() async {
     await _auth.signOut();
     await GoogleSignIn.instance.signOut();
+  }
+
+  @override
+  Future<void> blockUser(String userId) async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) throw StateError('blockUser called with no signed-in user.');
+    await _userDoc(fbUser.uid).update({
+      'blockedUserIds': FieldValue.arrayUnion([userId]),
+    });
+  }
+
+  @override
+  Future<void> unblockUser(String userId) async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) throw StateError('unblockUser called with no signed-in user.');
+    await _userDoc(fbUser.uid).update({
+      'blockedUserIds': FieldValue.arrayRemove([userId]),
+    });
+  }
+
+  @override
+  Stream<List<AppUser>> watchBlockedUsers() {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) return Stream.value(const []);
+    return _userDoc(fbUser.uid).snapshots().asyncMap((doc) async {
+      final ids = List<String>.from(doc.data()?['blockedUserIds'] as List? ?? const []);
+      if (ids.isEmpty) return const <AppUser>[];
+      // Blocked lists are expected to stay small, so individual gets are
+      // simpler here than batching with whereIn (which also caps at 30 ids
+      // per query and would need chunking).
+      final docs = await Future.wait(ids.map((id) => _userDoc(id).get()));
+      return docs.where((d) => d.exists).map(_userFromDoc).toList();
+    });
+  }
+
+  @override
+  Future<void> deactivateAccount() async {
+    final fbUser = _auth.currentUser;
+    if (fbUser == null) throw StateError('deactivateAccount called with no signed-in user.');
+    // Soft delete only — no data is removed. `active: false` is a marker a
+    // future admin/moderation tool could filter on; nothing in this app
+    // currently reads it to gate access, since signing out immediately
+    // routes the user to onboarding regardless. If they sign back in with
+    // the same credentials, signInWithEmail/signInWithGoogle above flip
+    // `active` back to true — i.e. this is really "log out and hide",
+    // reversible by the user themselves, not a hard block on the account.
+    await _userDoc(fbUser.uid).update({
+      'active': false,
+      'deletedAt': FieldValue.serverTimestamp(),
+    });
+    await signOut();
   }
 }

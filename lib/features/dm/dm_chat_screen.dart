@@ -5,7 +5,9 @@ import '../../app_state/messaging_providers.dart';
 import '../../app_state/repository_providers.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
+import '../../core/widgets/app_toast.dart';
 import '../../core/widgets/avatar_initials.dart';
+import '../../domain/models/dm_thread.dart';
 import '../../l10n/app_localizations.dart';
 import 'widgets/message_bubble.dart';
 
@@ -44,6 +46,33 @@ class _DmChatScreenState extends ConsumerState<DmChatScreen> {
         .sendMessage(threadId: widget.threadId, text: text);
   }
 
+  Future<void> _confirmBlock(DmThread thread) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.blockUserConfirmTitle),
+        content: Text(l10n.blockUserConfirmMessage(thread.participantName)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.blockUserAction, style: const TextStyle(color: AppColors.danger)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    await ref.read(authRepositoryProvider).blockUser(thread.participantId);
+    if (!mounted) return;
+    Navigator.of(context).maybePop();
+    showAppToast(context, l10n.userBlockedToast(thread.participantName));
+  }
+
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
@@ -77,9 +106,17 @@ class _DmChatScreenState extends ConsumerState<DmChatScreen> {
                       size: 34,
                     ),
                     const SizedBox(width: 10),
-                    Text(
-                      thread.participantName,
-                      style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    Expanded(
+                      child: Text(
+                        thread.participantName,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () => _confirmBlock(thread),
+                      tooltip: l10n.blockUserAction,
+                      icon: const Icon(Icons.block, size: 20, color: AppColors.textSecondary),
                     ),
                   ],
                 ],

@@ -9,6 +9,7 @@ class RoutePaths {
   static const compose = '/compose';
   static const paywall = '/paywall';
   static const editProfile = '/profile/edit';
+  static const blockedUsers = '/profile/blocked';
 
   static String placeDetail(String placeId) => '/place/$placeId';
   static String dmThread(String threadId) => '/dm-thread/$threadId';

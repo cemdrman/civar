@@ -28,6 +28,17 @@
 	<true/>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Civar, yalnızca bulunduğun yerdeki yorumları gösterebilmek için konumuna ihtiyaç duyar.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.281060357755-8uii37qhmtanok1muphsd3e6nm7n76gl</string>
+			</array>
+		</dict>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

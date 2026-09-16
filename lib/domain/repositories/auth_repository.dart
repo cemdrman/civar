@@ -42,4 +42,19 @@ abstract class AuthRepository {
   Future<AppUser> updateProfile({String? photoPath, String? bio});
 
   Future<void> signOut();
+
+  /// Blocks [userId]: prevents them from starting a new DM thread or sending
+  /// further messages to the signed-in user (see FirebaseMessagingRepository
+  /// for the enforcement point). Does not affect posts/comments — only DMs.
+  Future<void> blockUser(String userId);
+
+  Future<void> unblockUser(String userId);
+
+  /// The signed-in user's blocked list, resolved to full profiles.
+  Stream<List<AppUser>> watchBlockedUsers();
+
+  /// Soft-deletes the signed-in user's account: marks it inactive and signs
+  /// out, without touching any of their existing data (posts, DM threads,
+  /// etc. all remain untouched — this is a deactivation, not a real delete).
+  Future<void> deactivateAccount();
 }

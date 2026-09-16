@@ -59,12 +59,6 @@ class AppLocalizationsTr extends AppLocalizations {
   String get authAccessAccountTitle => 'Hesabına eriş';
 
   @override
-  String get authChooseMethodSubtitle => 'Devam etmek için bir yöntem seç.';
-
-  @override
-  String get continueWithEmail => 'E-posta ile devam et';
-
-  @override
   String get continueWithGoogle => 'Google ile devam et';
 
   @override
@@ -75,7 +69,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get createAccountSubtitle =>
-      'Bu bilgilerle bir hesap yoksa, adını da yazıp yeni hesap oluşturalım.';
+      'Bilgilerini gir, hesabını saniyeler içinde oluşturalım.';
 
   @override
   String get signInSubtitle =>
@@ -349,4 +343,49 @@ class AppLocalizationsTr extends AppLocalizations {
   String placeTagDistance(String place, String distance) {
     return '$place · $distance km';
   }
+
+  @override
+  String get orDividerLabel => 'veya';
+
+  @override
+  String get noOwnPostsYet => 'Henüz yorum yapmadın.';
+
+  @override
+  String get blockedUsersScreenTitle => 'Engellenenler';
+
+  @override
+  String get noBlockedUsersMessage => 'Henüz kimseyi engellemedin.';
+
+  @override
+  String get blockUserAction => 'Engelle';
+
+  @override
+  String get unblockUserAction => 'Engeli kaldır';
+
+  @override
+  String get blockUserConfirmTitle =>
+      'Bu kullanıcıyı engellemek istiyor musun?';
+
+  @override
+  String blockUserConfirmMessage(String name) {
+    return '$name artık sana mesaj gönderemez. İstediğin zaman profilinden engeli kaldırabilirsin.';
+  }
+
+  @override
+  String userBlockedToast(String name) {
+    return '$name kullanıcısını engelledin.';
+  }
+
+  @override
+  String get deleteAccountLabel => 'Hesabımı sil';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Hesabını silmek istiyor musun?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Hesabın pasif hale getirilecek ve oturumun kapatılacak. Mevcut yorumların ve mesajların silinmeyecek.';
+
+  @override
+  String get deleteAccountConfirmButton => 'Hesabı sil';
 }

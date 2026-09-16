@@ -1,6 +1,5 @@
 {
   "@@locale": "fr",
-
   "cancel": "Annuler",
   "save": "Enregistrer",
   "genericErrorRetry": "Une erreur s'est produite, réessaie.",
@@ -16,12 +15,10 @@
   "onboardingTagline": "Que se passe-t-il vraiment autour de toi ? Découvre et rejoins les commentaires, uniquement là où tu te trouves.",
   "onboardingStart": "Commencer",
   "authAccessAccountTitle": "Accède à ton compte",
-  "authChooseMethodSubtitle": "Choisis un moyen de continuer.",
-  "continueWithEmail": "Continuer avec l'e-mail",
   "continueWithGoogle": "Continuer avec Google",
   "googleSignInFailed": "Connexion avec Google impossible, réessaie.",
   "createAccountTitle": "Créer un compte",
-  "createAccountSubtitle": "S'il n'existe pas de compte avec ces informations, ajoute ton nom et on t'en crée un nouveau.",
+  "createAccountSubtitle": "Ajoute tes informations ci-dessous, ton compte sera prêt en quelques secondes.",
   "signInSubtitle": "Connecte-toi si tu as déjà un compte, ou crées-en un nouveau ci-dessous.",
   "fullNameHint": "Nom complet",
   "emailHint": "E-mail",
@@ -99,5 +96,18 @@
   "switchToThisPlan": "Passer à ce forfait",
   "replyCountLabel": "{count, plural, one{{count} réponse} other{{count} réponses}} · Répondre",
   "movedAwayFromLocation": "Tu t'es éloigné de ce lieu",
-  "placeTagDistance": "{place} · {distance} km"
+  "placeTagDistance": "{place} · {distance} km",
+  "orDividerLabel": "ou",
+  "noOwnPostsYet": "Tu n'as encore posté aucun commentaire.",
+  "blockedUsersScreenTitle": "Utilisateurs bloqués",
+  "noBlockedUsersMessage": "Tu n'as encore bloqué personne.",
+  "blockUserAction": "Bloquer",
+  "unblockUserAction": "Débloquer",
+  "blockUserConfirmTitle": "Bloquer cet utilisateur ?",
+  "blockUserConfirmMessage": "{name} ne pourra plus t'envoyer de messages. Tu peux le débloquer à tout moment depuis ton profil.",
+  "userBlockedToast": "Tu as bloqué {name}.",
+  "deleteAccountLabel": "Supprimer mon compte",
+  "deleteAccountConfirmTitle": "Supprimer ton compte ?",
+  "deleteAccountConfirmMessage": "Ton compte sera désactivé et tu seras déconnecté. Tes commentaires et messages existants ne seront pas supprimés.",
+  "deleteAccountConfirmButton": "Supprimer le compte"
 }

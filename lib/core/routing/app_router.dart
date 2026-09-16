@@ -13,6 +13,7 @@ import '../../features/map/map_screen.dart';
 import '../../features/onboarding/onboarding_flow_screen.dart';
 import '../../features/paywall/paywall_screen.dart';
 import '../../features/place_detail/place_detail_screen.dart';
+import '../../features/profile/blocked_users_screen.dart';
 import '../../features/profile/edit_profile_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/shell/app_shell.dart';
@@ -99,6 +100,10 @@ final appRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: RoutePaths.editProfile,
         builder: (context, state) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: RoutePaths.blockedUsers,
+        builder: (context, state) => const BlockedUsersScreen(),
       ),
     ],
   );

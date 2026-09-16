@@ -1,6 +1,5 @@
 {
   "@@locale": "ar",
-
   "cancel": "إلغاء",
   "save": "حفظ",
   "genericErrorRetry": "حدث خطأ ما، حاول مرة أخرى.",
@@ -16,12 +15,10 @@
   "onboardingTagline": "ماذا يحدث فعلاً من حولك؟ اطّلع على التعليقات وشارك فيها في مكانك فقط.",
   "onboardingStart": "ابدأ",
   "authAccessAccountTitle": "الدخول إلى حسابك",
-  "authChooseMethodSubtitle": "اختر طريقة للمتابعة.",
-  "continueWithEmail": "المتابعة بالبريد الإلكتروني",
   "continueWithGoogle": "المتابعة باستخدام Google",
   "googleSignInFailed": "تعذّر تسجيل الدخول عبر Google، حاول مرة أخرى.",
   "createAccountTitle": "إنشاء حساب",
-  "createAccountSubtitle": "إذا لم يكن هناك حساب بهذه البيانات، أضف اسمك وسننشئ لك حسابًا جديدًا.",
+  "createAccountSubtitle": "أدخل بياناتك أدناه وسننشئ حسابك خلال ثوانٍ.",
   "signInSubtitle": "سجّل الدخول إذا كان لديك حساب بالفعل، أو أنشئ حسابًا جديدًا أدناه.",
   "fullNameHint": "الاسم الكامل",
   "emailHint": "البريد الإلكتروني",
@@ -99,5 +96,18 @@
   "switchToThisPlan": "التبديل إلى هذه الخطة",
   "replyCountLabel": "{count, plural, zero{لا ردود} one{رد واحد} two{ردّان} few{{count} ردود} many{{count} ردًا} other{{count} رد}} · الرد",
   "movedAwayFromLocation": "لقد ابتعدت عن هذا الموقع",
-  "placeTagDistance": "{place} · {distance} كم"
+  "placeTagDistance": "{place} · {distance} كم",
+  "orDividerLabel": "أو",
+  "noOwnPostsYet": "لم تكتب أي تعليقات بعد.",
+  "blockedUsersScreenTitle": "المحظورون",
+  "noBlockedUsersMessage": "لم تحظر أحدًا بعد.",
+  "blockUserAction": "حظر",
+  "unblockUserAction": "إلغاء الحظر",
+  "blockUserConfirmTitle": "هل تريد حظر هذا المستخدم؟",
+  "blockUserConfirmMessage": "لن يتمكن {name} من مراسلتك بعد الآن. يمكنك إلغاء الحظر في أي وقت من ملفك الشخصي.",
+  "userBlockedToast": "تم حظر {name}.",
+  "deleteAccountLabel": "حذف حسابي",
+  "deleteAccountConfirmTitle": "هل تريد حذف حسابك؟",
+  "deleteAccountConfirmMessage": "سيتم إلغاء تفعيل حسابك وتسجيل خروجك. لن يتم حذف تعليقاتك ورسائلك الحالية.",
+  "deleteAccountConfirmButton": "حذف الحساب"
 }

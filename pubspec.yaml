@@ -47,6 +47,8 @@ dependencies:
   firebase_storage: ^13.5.0
   google_sign_in: ^7.2.0
   geoflutterfire_plus: ^0.0.34
+  flutter_map: ^8.2.2
+  latlong2: ^0.9.1
   intl: any
   shared_preferences: ^2.5.3
 

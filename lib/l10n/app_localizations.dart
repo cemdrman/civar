@@ -188,23 +188,11 @@ abstract class AppLocalizations {
   /// **'Start'**
   String get onboardingStart;
 
-  /// Title of the onboarding auth-choice step.
+  /// Title of the onboarding sign-in step.
   ///
   /// In en, this message translates to:
   /// **'Access your account'**
   String get authAccessAccountTitle;
-
-  /// Subtitle of the onboarding auth-choice step.
-  ///
-  /// In en, this message translates to:
-  /// **'Choose a way to continue.'**
-  String get authChooseMethodSubtitle;
-
-  /// Button to continue onboarding with email instead of Google.
-  ///
-  /// In en, this message translates to:
-  /// **'Continue with email'**
-  String get continueWithEmail;
 
   /// Google sign-in button label.
   ///
@@ -218,19 +206,19 @@ abstract class AppLocalizations {
   /// **'Couldn\'t sign in with Google, try again.'**
   String get googleSignInFailed;
 
-  /// Title shown when the email step offers registration.
+  /// Title of the onboarding account-creation step.
   ///
   /// In en, this message translates to:
   /// **'Create account'**
   String get createAccountTitle;
 
-  /// Subtitle shown when the email step offers registration.
+  /// Subtitle of the onboarding account-creation step.
   ///
   /// In en, this message translates to:
-  /// **'If there\'s no account with this info, add your name and we\'ll create a new one.'**
+  /// **'Add your info below and we\'ll get your account set up in seconds.'**
   String get createAccountSubtitle;
 
-  /// Subtitle shown on the initial email step before registration is offered.
+  /// Subtitle of the onboarding sign-in step, shown above the email/password fields.
   ///
   /// In en, this message translates to:
   /// **'Sign in if you already have an account, or create a new one below.'**
@@ -284,7 +272,7 @@ abstract class AppLocalizations {
   /// **'Sign in'**
   String get signIn;
 
-  /// Link to switch from sign-in to registration.
+  /// Link on the sign-in step that navigates to the account-creation step.
   ///
   /// In en, this message translates to:
   /// **'I don\'t have an account, I want to create one'**
@@ -697,6 +685,84 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{place} · {distance} km'**
   String placeTagDistance(String place, String distance);
+
+  /// Divider label between the email sign-in form and the Google sign-in alternative.
+  ///
+  /// In en, this message translates to:
+  /// **'or'**
+  String get orDividerLabel;
+
+  /// Empty state shown instead of the grid on the profile screen when the user has no posts.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t posted any comments yet.'**
+  String get noOwnPostsYet;
+
+  /// App bar title of the blocked-users screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Blocked users'**
+  String get blockedUsersScreenTitle;
+
+  /// Empty state on the blocked-users screen.
+  ///
+  /// In en, this message translates to:
+  /// **'You haven\'t blocked anyone.'**
+  String get noBlockedUsersMessage;
+
+  /// Button/menu action to block a user, also used as the confirm-dialog's confirm button label.
+  ///
+  /// In en, this message translates to:
+  /// **'Block'**
+  String get blockUserAction;
+
+  /// Button on the blocked-users screen to unblock someone.
+  ///
+  /// In en, this message translates to:
+  /// **'Unblock'**
+  String get unblockUserAction;
+
+  /// Title of the confirmation dialog shown before blocking a user.
+  ///
+  /// In en, this message translates to:
+  /// **'Block this user?'**
+  String get blockUserConfirmTitle;
+
+  /// Body of the confirmation dialog shown before blocking a user.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} won\'t be able to message you anymore. You can unblock them anytime from your profile.'**
+  String blockUserConfirmMessage(String name);
+
+  /// Toast shown after successfully blocking a user.
+  ///
+  /// In en, this message translates to:
+  /// **'You blocked {name}.'**
+  String userBlockedToast(String name);
+
+  /// Settings row label to soft-delete (deactivate) the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete my account'**
+  String get deleteAccountLabel;
+
+  /// Title of the confirmation dialog shown before deactivating the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete your account?'**
+  String get deleteAccountConfirmTitle;
+
+  /// Body of the confirmation dialog shown before deactivating the account.
+  ///
+  /// In en, this message translates to:
+  /// **'Your account will be deactivated and you\'ll be signed out. Your existing comments and messages won\'t be deleted.'**
+  String get deleteAccountConfirmMessage;
+
+  /// Confirm button label on the delete-account dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete account'**
+  String get deleteAccountConfirmButton;
 }
 
 class _AppLocalizationsDelegate

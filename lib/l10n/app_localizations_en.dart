@@ -59,12 +59,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get authAccessAccountTitle => 'Access your account';
 
   @override
-  String get authChooseMethodSubtitle => 'Choose a way to continue.';
-
-  @override
-  String get continueWithEmail => 'Continue with email';
-
-  @override
   String get continueWithGoogle => 'Continue with Google';
 
   @override
@@ -75,7 +69,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAccountSubtitle =>
-      'If there\'s no account with this info, add your name and we\'ll create a new one.';
+      'Add your info below and we\'ll get your account set up in seconds.';
 
   @override
   String get signInSubtitle =>
@@ -363,4 +357,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String placeTagDistance(String place, String distance) {
     return '$place · $distance km';
   }
+
+  @override
+  String get orDividerLabel => 'or';
+
+  @override
+  String get noOwnPostsYet => 'You haven\'t posted any comments yet.';
+
+  @override
+  String get blockedUsersScreenTitle => 'Blocked users';
+
+  @override
+  String get noBlockedUsersMessage => 'You haven\'t blocked anyone.';
+
+  @override
+  String get blockUserAction => 'Block';
+
+  @override
+  String get unblockUserAction => 'Unblock';
+
+  @override
+  String get blockUserConfirmTitle => 'Block this user?';
+
+  @override
+  String blockUserConfirmMessage(String name) {
+    return '$name won\'t be able to message you anymore. You can unblock them anytime from your profile.';
+  }
+
+  @override
+  String userBlockedToast(String name) {
+    return 'You blocked $name.';
+  }
+
+  @override
+  String get deleteAccountLabel => 'Delete my account';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Delete your account?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Your account will be deactivated and you\'ll be signed out. Your existing comments and messages won\'t be deleted.';
+
+  @override
+  String get deleteAccountConfirmButton => 'Delete account';
 }

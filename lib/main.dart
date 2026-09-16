@@ -28,12 +28,15 @@ Future<void> main() async {
   }
 
   try {
-    // On Android/iOS this reads the client ID from google-services.json /
-    // GoogleService-Info.plist automatically. Flutter Web has no such file —
-    // it needs an explicit web client ID — so this can fail there; that's
-    // fine, email/password auth doesn't depend on it, and the "Google ile
-    // devam et" button surfaces its own error if tapped when this failed.
-    await GoogleSignIn.instance.initialize();
+    // serverClientId (the Firebase project's *web* OAuth client, from
+    // google-services.json's client_type 3 entry) is required on Android —
+    // without it, the Credential Manager-based sign-in returns no ID token,
+    // so Firebase's GoogleAuthProvider.credential() call fails. Harmless to
+    // pass on iOS too, where the ID token already comes from the app's own
+    // CLIENT_ID in GoogleService-Info.plist.
+    await GoogleSignIn.instance.initialize(
+      serverClientId: '281060357755-lseb0kk7e5pnehr171afr6rll5rs935h.apps.googleusercontent.com',
+    );
   } catch (error) {
     debugPrint('GoogleSignIn.initialize() failed (non-fatal): $error');
   }

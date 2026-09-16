@@ -172,6 +172,19 @@ class FirebaseFeedRepository implements FeedRepository {
   }
 
   @override
+  Stream<List<Post>> watchPostsByAuthor(String authorId) {
+    return _postsRef
+        .where('authorId', isEqualTo: authorId)
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map((snap) => snap.docs
+            // distanceKm/radiusKm aren't meaningful for a profile's own-posts
+            // list — leave them at their Post defaults (0 / always-repliable).
+            .map((doc) => _postFromDoc(doc, distanceKm: 0, radiusKm: double.infinity))
+            .toList());
+  }
+
+  @override
   Future<Post> createPost({
     required String placeId,
     required String text,

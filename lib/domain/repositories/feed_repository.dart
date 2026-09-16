@@ -19,6 +19,12 @@ abstract class FeedRepository {
     required double radiusKm,
   });
 
+  /// Drives the profile screen's own-posts grid and stats. Distance-based
+  /// fields ([Post.distanceKm]/[Post.canReplyNow]) aren't meaningful here —
+  /// a profile shows all of the author's own posts regardless of where the
+  /// viewer currently is — so they're left at their defaults.
+  Stream<List<Post>> watchPostsByAuthor(String authorId);
+
   Future<Post> createPost({
     required String placeId,
     required String text,

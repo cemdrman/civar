@@ -81,6 +81,14 @@ class FirebaseMessagingRepository implements MessagingRepository {
   Future<void> sendMessage({required String threadId, required String text}) async {
     final myUid = _uid;
     final threadRef = _threadsRef.doc(threadId);
+
+    final threadDoc = await threadRef.get();
+    final participantIds = List<String>.from(threadDoc.data()?['participantIds'] as List? ?? const []);
+    final otherId = participantIds.firstWhere((id) => id != myUid, orElse: () => myUid);
+    if (otherId != myUid) {
+      await _ensureRecipientHasNotBlocked(otherId, myUid);
+    }
+
     await threadRef.collection('messages').doc().set({
       'senderId': myUid,
       'text': text,
@@ -117,9 +125,23 @@ class FirebaseMessagingRepository implements MessagingRepository {
     }).toList();
   }
 
+  /// Client-side-only enforcement, matching the trust-boundary caveat
+  /// documented on the `purchases` rule in firestore.rules: a blocked
+  /// sender's own client could still bypass this check and write to
+  /// Firestore directly. Real enforcement would need security rules (or a
+  /// Cloud Function) reading the recipient's `blockedUserIds` server-side.
+  Future<void> _ensureRecipientHasNotBlocked(String recipientId, String senderId) async {
+    final recipientDoc = await _usersRef.doc(recipientId).get();
+    final blockedIds = List<String>.from(recipientDoc.data()?['blockedUserIds'] as List? ?? const []);
+    if (blockedIds.contains(senderId)) {
+      throw StateError('You can\'t message this user.');
+    }
+  }
+
   @override
   Future<String> startThread(String otherUserId) async {
     final myUid = _uid;
+    await _ensureRecipientHasNotBlocked(otherUserId, myUid);
 
     final existing = await _threadsRef.where('participantIds', arrayContains: myUid).get();
     for (final doc in existing.docs) {

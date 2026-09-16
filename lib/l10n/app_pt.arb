@@ -1,6 +1,5 @@
 {
   "@@locale": "pt",
-
   "cancel": "Cancelar",
   "save": "Salvar",
   "genericErrorRetry": "Algo deu errado, tente novamente.",
@@ -16,12 +15,10 @@
   "onboardingTagline": "O que está realmente acontecendo ao seu redor? Veja e participe dos comentários, só onde você está.",
   "onboardingStart": "Começar",
   "authAccessAccountTitle": "Acesse sua conta",
-  "authChooseMethodSubtitle": "Escolha uma forma de continuar.",
-  "continueWithEmail": "Continuar com e-mail",
   "continueWithGoogle": "Continuar com o Google",
   "googleSignInFailed": "Não foi possível entrar com o Google, tente novamente.",
   "createAccountTitle": "Criar conta",
-  "createAccountSubtitle": "Se não houver uma conta com esses dados, adicione seu nome e criaremos uma nova.",
+  "createAccountSubtitle": "Adicione suas informações abaixo e criamos sua conta em segundos.",
   "signInSubtitle": "Entre se você já tem uma conta, ou crie uma nova abaixo.",
   "fullNameHint": "Nome completo",
   "emailHint": "E-mail",
@@ -99,5 +96,18 @@
   "switchToThisPlan": "Mudar para este plano",
   "replyCountLabel": "{count, plural, one{{count} resposta} other{{count} respostas}} · Responder",
   "movedAwayFromLocation": "Você se afastou deste local",
-  "placeTagDistance": "{place} · {distance} km"
+  "placeTagDistance": "{place} · {distance} km",
+  "orDividerLabel": "ou",
+  "noOwnPostsYet": "Você ainda não fez nenhum comentário.",
+  "blockedUsersScreenTitle": "Usuários bloqueados",
+  "noBlockedUsersMessage": "Você ainda não bloqueou ninguém.",
+  "blockUserAction": "Bloquear",
+  "unblockUserAction": "Desbloquear",
+  "blockUserConfirmTitle": "Bloquear este usuário?",
+  "blockUserConfirmMessage": "{name} não poderá mais te enviar mensagens. Você pode desbloquear a qualquer momento pelo seu perfil.",
+  "userBlockedToast": "Você bloqueou {name}.",
+  "deleteAccountLabel": "Excluir minha conta",
+  "deleteAccountConfirmTitle": "Excluir sua conta?",
+  "deleteAccountConfirmMessage": "Sua conta será desativada e você será desconectado. Seus comentários e mensagens existentes não serão excluídos.",
+  "deleteAccountConfirmButton": "Excluir conta"
 }

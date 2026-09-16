@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../app_state/auth_providers.dart';
+import '../../app_state/feed_providers.dart';
 import '../../app_state/locale_providers.dart';
 import '../../app_state/location_providers.dart';
 import '../../app_state/membership_providers.dart';
@@ -11,18 +12,16 @@ import '../../app_state/repository_providers.dart';
 import '../../core/routing/route_paths.dart';
 import '../../core/theme/app_colors.dart';
 import '../../core/theme/app_radii.dart';
+import '../../core/widgets/app_toast.dart';
+import '../../domain/models/place.dart';
+import '../../domain/models/post.dart';
 import '../../domain/repositories/location_repository.dart';
 import '../../l10n/app_localizations.dart';
 
-/// Presentational seed data for the "Yorumların" grid — matches the design's
-/// MY_POSTS constant. Not modeled as a domain entity since it's static display
-/// content, not something the app mutates.
-const _myPosts = [
-  ('Kumsal Fırın', 'Su böreği efsane, katılıyorum.'),
-  ('Sahil Parkı', 'Kahve arabası bugün de buradaydı.'),
-  ('Yalı Kahvesi', 'Masa 4 manzaralı, oraya oturun.'),
-  ('Liman Duvarı', 'Gün batımında fotoğraf çekilir.'),
-];
+/// Most-recent own posts shown in the "Yorumların" grid — capped so the
+/// profile screen stays a fixed-height overview rather than growing to the
+/// full post history.
+const _maxOwnPostsShown = 6;
 
 class ProfileScreen extends ConsumerWidget {
   const ProfileScreen({super.key});
@@ -32,6 +31,14 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = AppLocalizations.of(context)!;
     final user = ref.watch(currentUserProvider).value;
     final tier = ref.watch(currentTierProvider).value;
+    final myPosts = ref.watch(myPostsStreamProvider).value ?? const <Post>[];
+    final places = ref.watch(placesStreamProvider).value ?? const <Place>[];
+
+    final commentCount = myPosts.length;
+    final placeCount = myPosts.map((p) => p.placeId).toSet().length;
+    final likeCount = myPosts.fold<int>(0, (sum, p) => sum + p.likeCount);
+    String placeNameOf(String placeId) =>
+        places.where((p) => p.id == placeId).firstOrNull?.name ?? '';
 
     return SafeArea(
       child: ListView(
@@ -111,9 +118,9 @@ class ProfileScreen extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                _StatCell(value: '14', label: l10n.statComments, showDivider: true),
-                _StatCell(value: '212', label: l10n.statLikes, showDivider: true),
-                _StatCell(value: '9', label: l10n.statPlaces, showDivider: false),
+                _StatCell(value: '$commentCount', label: l10n.statComments, showDivider: true),
+                _StatCell(value: '$likeCount', label: l10n.statLikes, showDivider: true),
+                _StatCell(value: '$placeCount', label: l10n.statPlaces, showDivider: false),
               ],
             ),
           ),
@@ -155,44 +162,59 @@ class ProfileScreen extends ConsumerWidget {
           const SizedBox(height: 20),
           Text(l10n.yourCommentsTitle, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
           const SizedBox(height: 10),
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-            childAspectRatio: 1.5,
-            children: [
-              for (final (place, snippet) in _myPosts)
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface2,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        place,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          fontWeight: FontWeight.w700,
-                          color: AppColors.accent2,
+          if (myPosts.isEmpty)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+              decoration: BoxDecoration(
+                color: AppColors.surface2,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                l10n.noOwnPostsYet,
+                textAlign: TextAlign.center,
+                style: const TextStyle(fontSize: 12.5, color: AppColors.textSecondary),
+              ),
+            )
+          else
+            GridView.count(
+              crossAxisCount: 2,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
+              childAspectRatio: 1.5,
+              children: [
+                for (final post in myPosts.take(_maxOwnPostsShown))
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.surface2,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          placeNameOf(post.placeId),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.accent2,
+                          ),
                         ),
-                      ),
-                      Text(
-                        snippet,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 12, height: 1.3),
-                      ),
-                    ],
+                        Text(
+                          post.text,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(fontSize: 12, height: 1.3),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-            ],
-          ),
+              ],
+            ),
           const SizedBox(height: 20),
           Container(
             decoration: BoxDecoration(
@@ -208,7 +230,10 @@ class ProfileScreen extends ConsumerWidget {
                 ),
                 _SettingsRow(label: l10n.notifications),
                 _SettingsRow(label: l10n.privacy),
-                _SettingsRow(label: l10n.blockedUsers),
+                _SettingsRow(
+                  label: l10n.blockedUsers,
+                  onTap: () => context.push(RoutePaths.blockedUsers),
+                ),
                 _SettingsRow(
                   label: l10n.languageSettingsLabel,
                   onTap: () => _openLanguagePicker(context, ref),
@@ -216,8 +241,13 @@ class ProfileScreen extends ConsumerWidget {
                 _SettingsRow(
                   label: l10n.signOut,
                   color: AppColors.danger,
+                  onTap: () => _signOut(context, ref),
+                ),
+                _SettingsRow(
+                  label: l10n.deleteAccountLabel,
+                  color: AppColors.danger,
                   showDivider: false,
-                  onTap: () => ref.read(authRepositoryProvider).signOut(),
+                  onTap: () => _confirmDeleteAccount(context, ref),
                 ),
               ],
             ),
@@ -245,6 +275,46 @@ class ProfileScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _signOut(BuildContext context, WidgetRef ref) async {
+    await ref.read(authRepositoryProvider).signOut();
+    // GoRouter's refreshListenable re-evaluates the redirect for the
+    // *current* route on an auth-state change, but doesn't reliably do so
+    // from inside a StatefulShellRoute branch without an explicit
+    // navigation — so this stays on /profile (rendering a blank signed-out
+    // user) until something else triggers a redirect check. Navigate
+    // explicitly instead of relying on that.
+    if (context.mounted) context.go(RoutePaths.onboarding);
+  }
+
+  Future<void> _confirmDeleteAccount(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(l10n.deleteAccountConfirmTitle),
+        content: Text(l10n.deleteAccountConfirmMessage),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: Text(l10n.cancel),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: Text(l10n.deleteAccountConfirmButton, style: const TextStyle(color: AppColors.danger)),
+          ),
+        ],
+      ),
+    );
+    if (confirmed != true) return;
+
+    try {
+      await ref.read(authRepositoryProvider).deactivateAccount();
+      if (context.mounted) context.go(RoutePaths.onboarding);
+    } catch (_) {
+      if (context.mounted) showAppToast(context, l10n.genericErrorRetry);
+    }
   }
 
   void _openLanguagePicker(BuildContext context, WidgetRef ref) {

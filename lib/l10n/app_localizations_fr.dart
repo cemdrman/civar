@@ -59,12 +59,6 @@ class AppLocalizationsFr extends AppLocalizations {
   String get authAccessAccountTitle => 'Accède à ton compte';
 
   @override
-  String get authChooseMethodSubtitle => 'Choisis un moyen de continuer.';
-
-  @override
-  String get continueWithEmail => 'Continuer avec l\'e-mail';
-
-  @override
   String get continueWithGoogle => 'Continuer avec Google';
 
   @override
@@ -76,7 +70,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get createAccountSubtitle =>
-      'S\'il n\'existe pas de compte avec ces informations, ajoute ton nom et on t\'en crée un nouveau.';
+      'Ajoute tes informations ci-dessous, ton compte sera prêt en quelques secondes.';
 
   @override
   String get signInSubtitle =>
@@ -367,4 +361,48 @@ class AppLocalizationsFr extends AppLocalizations {
   String placeTagDistance(String place, String distance) {
     return '$place · $distance km';
   }
+
+  @override
+  String get orDividerLabel => 'ou';
+
+  @override
+  String get noOwnPostsYet => 'Tu n\'as encore posté aucun commentaire.';
+
+  @override
+  String get blockedUsersScreenTitle => 'Utilisateurs bloqués';
+
+  @override
+  String get noBlockedUsersMessage => 'Tu n\'as encore bloqué personne.';
+
+  @override
+  String get blockUserAction => 'Bloquer';
+
+  @override
+  String get unblockUserAction => 'Débloquer';
+
+  @override
+  String get blockUserConfirmTitle => 'Bloquer cet utilisateur ?';
+
+  @override
+  String blockUserConfirmMessage(String name) {
+    return '$name ne pourra plus t\'envoyer de messages. Tu peux le débloquer à tout moment depuis ton profil.';
+  }
+
+  @override
+  String userBlockedToast(String name) {
+    return 'Tu as bloqué $name.';
+  }
+
+  @override
+  String get deleteAccountLabel => 'Supprimer mon compte';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Supprimer ton compte ?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Ton compte sera désactivé et tu seras déconnecté. Tes commentaires et messages existants ne seront pas supprimés.';
+
+  @override
+  String get deleteAccountConfirmButton => 'Supprimer le compte';
 }

@@ -59,12 +59,6 @@ class AppLocalizationsPt extends AppLocalizations {
   String get authAccessAccountTitle => 'Acesse sua conta';
 
   @override
-  String get authChooseMethodSubtitle => 'Escolha uma forma de continuar.';
-
-  @override
-  String get continueWithEmail => 'Continuar com e-mail';
-
-  @override
   String get continueWithGoogle => 'Continuar com o Google';
 
   @override
@@ -76,7 +70,7 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get createAccountSubtitle =>
-      'Se não houver uma conta com esses dados, adicione seu nome e criaremos uma nova.';
+      'Adicione suas informações abaixo e criamos sua conta em segundos.';
 
   @override
   String get signInSubtitle =>
@@ -368,4 +362,48 @@ class AppLocalizationsPt extends AppLocalizations {
   String placeTagDistance(String place, String distance) {
     return '$place · $distance km';
   }
+
+  @override
+  String get orDividerLabel => 'ou';
+
+  @override
+  String get noOwnPostsYet => 'Você ainda não fez nenhum comentário.';
+
+  @override
+  String get blockedUsersScreenTitle => 'Usuários bloqueados';
+
+  @override
+  String get noBlockedUsersMessage => 'Você ainda não bloqueou ninguém.';
+
+  @override
+  String get blockUserAction => 'Bloquear';
+
+  @override
+  String get unblockUserAction => 'Desbloquear';
+
+  @override
+  String get blockUserConfirmTitle => 'Bloquear este usuário?';
+
+  @override
+  String blockUserConfirmMessage(String name) {
+    return '$name não poderá mais te enviar mensagens. Você pode desbloquear a qualquer momento pelo seu perfil.';
+  }
+
+  @override
+  String userBlockedToast(String name) {
+    return 'Você bloqueou $name.';
+  }
+
+  @override
+  String get deleteAccountLabel => 'Excluir minha conta';
+
+  @override
+  String get deleteAccountConfirmTitle => 'Excluir sua conta?';
+
+  @override
+  String get deleteAccountConfirmMessage =>
+      'Sua conta será desativada e você será desconectado. Seus comentários e mensagens existentes não serão excluídos.';
+
+  @override
+  String get deleteAccountConfirmButton => 'Excluir conta';
 }
